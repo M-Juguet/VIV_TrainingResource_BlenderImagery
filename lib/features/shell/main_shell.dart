@@ -7,6 +7,7 @@ import 'package:window_manager/window_manager.dart';
 import '../../core/theme/viv_colors.dart';
 import '../../core/theme/viv_spacing.dart';
 import '../../core/theme/viv_typography.dart';
+import '../../core/router/app_router.dart';
 
 class MainShell extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -20,6 +21,17 @@ class MainShell extends ConsumerStatefulWidget {
 class _MainShellState extends ConsumerState<MainShell> {
   bool _isSidebarCollapsed = false;
 
+  static const Map<int, String> _routeTitles = {
+    0: 'Tableau de bord',
+    1: 'Programme',
+    2: 'Mes signets',
+    3: 'Basics 101',
+    4: 'Chapitre 1',
+    5: 'Chapitre 2',
+    6: 'Chapitre 3',
+    7: 'Paramètres',
+  };
+
   void _goBranch(int index) {
     widget.navigationShell.goBranch(
       index,
@@ -30,6 +42,12 @@ class _MainShellState extends ConsumerState<MainShell> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = widget.navigationShell.currentIndex;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (ref.read(activeBranchIndexProvider) != selectedIndex) {
+        ref.read(activeBranchIndexProvider.notifier).changeIndex(selectedIndex);
+      }
+    });
 
     return Scaffold(
       backgroundColor: VivColors.offWhite,
@@ -99,7 +117,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                 vertical: VivSpacing.space2,
                               ),
                               child: Text(
-                                'OUTILS FORMATION',
+                                'MENU',
                                 style: TextStyle(
                                   color: VivColors.gray500,
                                   fontSize: 10,
@@ -110,28 +128,28 @@ class _MainShellState extends ConsumerState<MainShell> {
                             ),
                           _buildNavItem(
                             icon: LucideIcons.layoutDashboard,
-                            title: 'Tableau de bord',
+                            title: _routeTitles[0]!,
                             index: 0,
                             selectedIndex: selectedIndex,
                             isCompact: isCompact,
                           ),
                           const SizedBox(height: VivSpacing.space1),
                           _buildNavItem(
-                            icon: LucideIcons.filePlus2,
-                            title: 'Création de programme',
+                            icon: LucideIcons.bookOpen,
+                            title: _routeTitles[1]!,
                             index: 1,
                             selectedIndex: selectedIndex,
                             isCompact: isCompact,
                           ),
                           const SizedBox(height: VivSpacing.space1),
                           _buildNavItem(
-                            icon: LucideIcons.folderEdit,
-                            title: 'Édition de programme',
+                            icon: LucideIcons.bookmark,
+                            title: _routeTitles[2]!,
                             index: 2,
                             selectedIndex: selectedIndex,
                             isCompact: isCompact,
                           ),
-                          const SizedBox(height: VivSpacing.space5),
+                          const SizedBox(height: VivSpacing.space4),
                           if (!isCompact)
                             const Padding(
                               padding: EdgeInsets.symmetric(
@@ -139,7 +157,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                 vertical: VivSpacing.space2,
                               ),
                               child: Text(
-                                'SYSTÈME',
+                                'LES BASES',
                                 style: TextStyle(
                                   color: VivColors.gray500,
                                   fontSize: 10,
@@ -149,9 +167,49 @@ class _MainShellState extends ConsumerState<MainShell> {
                               ),
                             ),
                           _buildNavItem(
-                            icon: LucideIcons.settings,
-                            title: 'Paramètres',
+                            icon: LucideIcons.compass,
+                            title: _routeTitles[3]!,
                             index: 3,
+                            selectedIndex: selectedIndex,
+                            isCompact: isCompact,
+                          ),
+                          const SizedBox(height: VivSpacing.space4),
+                          if (!isCompact)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: VivSpacing.space3,
+                                vertical: VivSpacing.space2,
+                              ),
+                              child: Text(
+                                'FORMATION',
+                                style: TextStyle(
+                                  color: VivColors.gray500,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ),
+                          _buildNavItem(
+                            icon: LucideIcons.film,
+                            title: _routeTitles[4]!,
+                            index: 4,
+                            selectedIndex: selectedIndex,
+                            isCompact: isCompact,
+                          ),
+                          const SizedBox(height: VivSpacing.space1),
+                          _buildNavItem(
+                            icon: LucideIcons.shapes,
+                            title: _routeTitles[5]!,
+                            index: 5,
+                            selectedIndex: selectedIndex,
+                            isCompact: isCompact,
+                          ),
+                          const SizedBox(height: VivSpacing.space1),
+                          _buildNavItem(
+                            icon: LucideIcons.image,
+                            title: _routeTitles[6]!,
+                            index: 6,
                             selectedIndex: selectedIndex,
                             isCompact: isCompact,
                           ),
@@ -159,88 +217,33 @@ class _MainShellState extends ConsumerState<MainShell> {
                       ),
                     ),
 
-                    // Footer Profile Placeholder
+                    // Séparateur discret (Divider)
                     Padding(
-                      padding: const EdgeInsets.only(
-                        left: VivSpacing.space3,
-                        right: VivSpacing.space3,
-                        top: VivSpacing.space3,
-                        bottom: VivSpacing.space5,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isCompact ? VivSpacing.space2 : VivSpacing.space4,
+                        vertical: VivSpacing.space2,
                       ),
-                      child: isCompact
-                          ? const Center(
-                              child: CircleAvatar(
-                                radius: 14,
-                                backgroundColor: VivColors.lime,
-                                child: Text(
-                                  'VF',
-                                  style: TextStyle(
-                                    color: VivColors.black,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(
-                              padding: const EdgeInsets.all(VivSpacing.space3),
-                              decoration: BoxDecoration(
-                                color: VivColors.gray100.withValues(
-                                  alpha: 0.05,
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  VivSpacing.radiusMd,
-                                ),
-                                border: Border.all(
-                                  color: VivColors.gray100.withValues(
-                                    alpha: 0.1,
-                                  ),
-                                ),
-                              ),
-                              child: const Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 14,
-                                    backgroundColor: VivColors.lime,
-                                    child: Text(
-                                      'VF',
-                                      style: TextStyle(
-                                        color: VivColors.black,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: VivSpacing.space3),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          'VIV Formation',
-                                          style: TextStyle(
-                                            color: VivColors.paper,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          'Boîte à outils locale',
-                                          style: TextStyle(
-                                            color: VivColors.gray500,
-                                            fontSize: 10,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                      child: Divider(
+                        color: VivColors.gray100.withValues(alpha: 0.1),
+                        height: 1,
+                        thickness: 1,
+                      ),
+                    ),
+
+                    // Bouton Paramètres tout en bas
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: isCompact ? VivSpacing.space2 : VivSpacing.space3,
+                        right: isCompact ? VivSpacing.space2 : VivSpacing.space3,
+                        bottom: VivSpacing.space4,
+                      ),
+                      child: _buildNavItem(
+                        icon: LucideIcons.settings,
+                        title: _routeTitles[7]!,
+                        index: 7,
+                        selectedIndex: selectedIndex,
+                        isCompact: isCompact,
+                      ),
                     ),
                   ],
                 );
@@ -295,6 +298,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                           ),
                         ),
                       ),
+                      _buildWindowControls(),
                     ],
                   ),
                 ),
@@ -310,18 +314,7 @@ class _MainShellState extends ConsumerState<MainShell> {
   }
 
   String _getTitle(int index) {
-    switch (index) {
-      case 0:
-        return 'Tableau de bord';
-      case 1:
-        return 'Création de programme';
-      case 2:
-        return 'Édition de programme';
-      case 3:
-        return 'Paramètres du système';
-      default:
-        return 'Tableau de bord';
-    }
+    return _routeTitles[index] ?? '';
   }
 
   Widget _buildNavItem({
@@ -339,8 +332,9 @@ class _MainShellState extends ConsumerState<MainShell> {
         borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: EdgeInsets.all(
-            isCompact ? VivSpacing.space2 : VivSpacing.space3,
+          padding: EdgeInsets.symmetric(
+            horizontal: isCompact ? VivSpacing.space2 : VivSpacing.space3,
+            vertical: VivSpacing.space2,
           ),
           decoration: BoxDecoration(
             color: isSelected
@@ -382,6 +376,78 @@ class _MainShellState extends ConsumerState<MainShell> {
                 ),
               ],
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWindowControls() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _WindowButton(
+          icon: LucideIcons.minus,
+          onTap: () => windowManager.minimize(),
+        ),
+        _WindowButton(
+          icon: LucideIcons.square,
+          onTap: () async {
+            if (await windowManager.isMaximized()) {
+              windowManager.unmaximize();
+            } else {
+              windowManager.maximize();
+            }
+          },
+        ),
+        _WindowButton(
+          icon: LucideIcons.x,
+          onTap: () => windowManager.close(),
+          isClose: true,
+        ),
+      ],
+    );
+  }
+}
+
+class _WindowButton extends StatefulWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final bool isClose;
+
+  const _WindowButton({
+    required this.icon,
+    required this.onTap,
+    this.isClose = false,
+  });
+
+  @override
+  State<_WindowButton> createState() => _WindowButtonState();
+}
+
+class _WindowButtonState extends State<_WindowButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final hoverBgColor = widget.isClose ? const Color(0xFFE81123) : VivColors.gray100;
+    final iconColor = (_isHovered && widget.isClose) ? Colors.white : VivColors.black;
+
+    return ExcludeSemantics(
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: Container(
+            width: 48,
+            height: double.infinity,
+            color: _isHovered ? hoverBgColor : Colors.transparent,
+            child: Icon(
+              widget.icon,
+              size: 14,
+              color: iconColor,
+            ),
           ),
         ),
       ),

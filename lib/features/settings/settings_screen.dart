@@ -40,8 +40,40 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ]),
+          const SizedBox(height: VivSpacing.space8),
+          _buildSectionHeader('À propos', LucideIcons.info),
+          const SizedBox(height: VivSpacing.space4),
+          _buildCard([
+            _buildInfoRow('Nom de l\'application', '[SU] Intitulé de la formation'),
+            const Divider(height: VivSpacing.space6, color: VivColors.gray100),
+            _buildInfoRow('Version de l\'application', '0.1.0'),
+            const Divider(height: VivSpacing.space6, color: VivColors.gray100),
+            _buildInfoRow('Copyright', '© 2026 VIV. Tous droits réservés.'),
+          ]),
         ],
       ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: VivTypography.small.copyWith(
+            fontWeight: FontWeight.w500,
+            color: VivColors.gray500,
+          ),
+        ),
+        Text(
+          value,
+          style: VivTypography.small.copyWith(
+            fontWeight: FontWeight.bold,
+            color: VivColors.black,
+          ),
+        ),
+      ],
     );
   }
 

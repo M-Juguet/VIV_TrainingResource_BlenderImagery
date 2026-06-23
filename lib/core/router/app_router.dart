@@ -3,10 +3,27 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/dashboard/dashboard_screen.dart';
-import '../../features/program_creator/program_creator_screen.dart';
-import '../../features/program_editor/program_editor_screen.dart';
+import '../../features/program/program_screen.dart';
+import '../../features/bookmarks/bookmarks_screen.dart';
+import '../../features/basics_101/basics_101_screen.dart';
+import '../../features/chapter_1/chapter_1_screen.dart';
+import '../../features/chapter_2/chapter_2_screen.dart';
+import '../../features/chapter_3/chapter_3_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/shell/main_shell.dart';
+
+class ActiveBranchIndexNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void changeIndex(int newIndex) {
+    state = newIndex;
+  }
+}
+
+final activeBranchIndexProvider = NotifierProvider<ActiveBranchIndexNotifier, int>(() {
+  return ActiveBranchIndexNotifier();
+});
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -28,16 +45,60 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/create',
-                builder: (context, state) => const ProgramCreatorScreen(),
+                path: '/program',
+                builder: (context, state) => const ProgramScreen(),
               ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/edit',
-                builder: (context, state) => const ProgramEditorScreen(),
+                path: '/bookmarks',
+                builder: (context, state) => const BookmarksScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/basics-101',
+                builder: (context, state) {
+                  final target = state.uri.queryParameters['target'];
+                  return Basics101Screen(targetModuleId: target);
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/chapter-1',
+                builder: (context, state) {
+                  final target = state.uri.queryParameters['target'];
+                  return Chapter1Screen(targetModuleId: target);
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/chapter-2',
+                builder: (context, state) {
+                  final target = state.uri.queryParameters['target'];
+                  return Chapter2Screen(targetModuleId: target);
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/chapter-3',
+                builder: (context, state) {
+                  final target = state.uri.queryParameters['target'];
+                  return Chapter3Screen(targetModuleId: target);
+                },
               ),
             ],
           ),
