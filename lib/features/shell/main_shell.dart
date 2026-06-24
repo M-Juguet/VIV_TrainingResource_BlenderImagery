@@ -340,7 +340,7 @@ class _MainShellState extends ConsumerState<MainShell> {
   }) {
     bool isSelected = selectedIndex == index;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: 1),
       child: InkWell(
         onTap: () => _goBranch(index),
         borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
@@ -348,7 +348,7 @@ class _MainShellState extends ConsumerState<MainShell> {
           duration: const Duration(milliseconds: 200),
           padding: EdgeInsets.symmetric(
             horizontal: isCompact ? VivSpacing.space2 : VivSpacing.space3,
-            vertical: VivSpacing.space2,
+            vertical: isCompact ? VivSpacing.space2 : 6.0,
           ),
           decoration: BoxDecoration(
             color: isSelected
@@ -402,14 +402,14 @@ class _MainShellState extends ConsumerState<MainShell> {
     required VoidCallback onTap,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(VivSpacing.radiusSm),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: VivSpacing.space3,
-            vertical: VivSpacing.space2,
+            vertical: 6.0,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
