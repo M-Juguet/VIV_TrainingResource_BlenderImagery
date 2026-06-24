@@ -13,7 +13,7 @@ class ContentModuleRenderer extends StatelessWidget {
   final ContentModule module;
   final bool isBookmarked;
   final VoidCallback? onBookmarkToggle;
-  final Function(String)? onImageTap;
+  final Function(String path, String? caption)? onImageTap;
 
   const ContentModuleRenderer({
     super.key,
@@ -183,41 +183,26 @@ class ContentModuleRenderer extends StatelessWidget {
         MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
-            onTap: onImageTap != null ? () => onImageTap!(imagePath) : null,
+            onTap: onImageTap != null ? () => onImageTap!(imagePath, caption) : null,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
                 border: Border.all(color: VivColors.gray200),
               ),
               clipBehavior: Clip.hardEdge,
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  // Fallback visual placeholder if asset is not found
-                  return Container(
-                    height: isFullWidth ? 300 : 200,
-                    color: VivColors.offWhite,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          LucideIcons.image,
-                          color: VivColors.gray400,
-                          size: 36,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Média Placeholder\n($imagePath)',
-                          textAlign: TextAlign.center,
-                          style: VivTypography.small.copyWith(color: VivColors.gray400),
-                        ),
-                      ],
+              child: imagePath.startsWith('http')
+                  ? Image.network(
+                      imagePath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          _buildErrorPlaceholder(isFullWidth, imagePath),
+                    )
+                  : Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          _buildErrorPlaceholder(isFullWidth, imagePath),
                     ),
-                  );
-                },
-              ),
             ),
           ),
         ),
@@ -232,6 +217,30 @@ class ContentModuleRenderer extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+
+  Widget _buildErrorPlaceholder(bool isFullWidth, String path) {
+    return Container(
+      height: isFullWidth ? 300 : 200,
+      color: VivColors.offWhite,
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            LucideIcons.image,
+            color: VivColors.gray400,
+            size: 36,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Média Placeholder\n($path)',
+            textAlign: TextAlign.center,
+            style: VivTypography.small.copyWith(color: VivColors.gray400),
+          ),
+        ],
+      ),
     );
   }
 }

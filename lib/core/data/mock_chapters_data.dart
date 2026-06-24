@@ -55,8 +55,8 @@ const List<ContentModule> chapter1Modules = [
     id: 'ch1_side',
     title: '2. Représentation visuelle',
     content: 'Ce module scindé côte à côte illustre comment associer un paragraphe explicatif à une figure ou un schéma technique. L\'image se trouve à droite et le texte à gauche (la disposition est modifiable via le code du module).\n\nLe texte se prête à des explications pas à pas de diagrammes ou de captures d\'écran de l\'outil étudié.',
-    imagePath: 'assets/images/placeholder_ch1.png',
-    caption: 'Figure 1.1 : Légende descriptive de l\'image fictive.',
+    imagePath: 'https://picsum.photos/id/1018/1200/800',
+    caption: 'Figure 1.1 : Image de test chargée depuis Lorem Picsum (Réseau).',
     layout: ContentLayout.textLeft,
   ),
   InfoModule(

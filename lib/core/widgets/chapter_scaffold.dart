@@ -1,5 +1,7 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../models/content_module.dart';
 import 'content_module_renderer.dart';
 import 'chapter_outline_widget.dart';
@@ -151,8 +153,8 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
                     onBookmarkToggle: () {
                       ref.read(bookmarksProvider.notifier).toggleBookmark(module.id);
                     },
-                    onImageTap: (path) {
-                      // Zoom image fictif pour le template
+                    onImageTap: (path, caption) {
+                      _showFullscreenImage(context, path, caption);
                     },
                   ),
                 );
@@ -182,6 +184,124 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showFullscreenImage(BuildContext context, String imagePath, String? caption) {
+    final isNetwork = imagePath.startsWith('http');
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Fermer la visionneuse',
+      barrierColor: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      color: Colors.black.withValues(alpha: 0.65),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(VivSpacing.space6),
+                    child: InteractiveViewer(
+                      minScale: 0.8,
+                      maxScale: 5.0,
+                      clipBehavior: Clip.none,
+                      child: isNetwork
+                          ? Image.network(
+                              imagePath,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(LucideIcons.image, size: 64, color: Colors.white30),
+                            )
+                          : Image.asset(
+                              imagePath,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(LucideIcons.image, size: 64, color: Colors.white30),
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: VivSpacing.space6,
+                right: VivSpacing.space6,
+                child: ClipOval(
+                  child: Material(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Icon(
+                          LucideIcons.x,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              if (caption != null && caption.isNotEmpty)
+                Positioned(
+                  left: VivSpacing.space6,
+                  right: VivSpacing.space6,
+                  bottom: VivSpacing.space8,
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(VivSpacing.radiusLg),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(VivSpacing.radiusLg),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                          ),
+                          child: Text(
+                            caption,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+            ),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }
