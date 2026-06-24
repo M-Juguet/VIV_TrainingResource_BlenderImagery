@@ -188,18 +188,22 @@ class ContentModuleRenderer extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
                 border: Border.all(color: VivColors.gray200),
+                color: VivColors.offWhite,
               ),
               clipBehavior: Clip.hardEdge,
+              constraints: BoxConstraints(
+                maxHeight: isFullWidth ? 450.0 : 300.0,
+              ),
               child: imagePath.startsWith('http')
                   ? Image.network(
                       imagePath,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) =>
                           _buildErrorPlaceholder(isFullWidth, imagePath),
                     )
                   : Image.asset(
                       imagePath,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) =>
                           _buildErrorPlaceholder(isFullWidth, imagePath),
                     ),
