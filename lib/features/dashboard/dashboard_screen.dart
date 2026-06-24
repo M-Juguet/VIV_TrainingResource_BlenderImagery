@@ -8,6 +8,7 @@ import '../../core/theme/viv_colors.dart';
 import '../../core/theme/viv_spacing.dart';
 import '../../core/theme/viv_typography.dart';
 import '../../core/storage/bookmarks_provider.dart';
+import '../../core/storage/chapter_progress_provider.dart';
 import '../../core/data/mock_chapters_data.dart';
 import '../../core/models/content_module.dart';
 
@@ -71,6 +72,11 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookmarkedIds = ref.watch(bookmarksProvider);
+    final completedChapters = ref.watch(chapterProgressProvider);
+
+    final allPaths = ['/basics-101', '/chapter-1', '/chapter-2', '/chapter-3'];
+    final completedCount = allPaths.where((p) => completedChapters.contains(p)).length;
+    final double progressPercent = completedCount / 4.0;
 
     return Scaffold(
       backgroundColor: Colors.transparent, // Car affiché dans le viewport de MainShell
@@ -80,7 +86,7 @@ class DashboardScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 1. Bandeau Héro d'accueil (Accès direct au Chapitre 1)
-            _buildHeroSection(context),
+            _buildHeroSection(context, completedCount, progressPercent, completedChapters),
             const SizedBox(height: VivSpacing.space6),
 
             // 2. Bento Layout pour les Chapitres, Signets et Liens
@@ -113,7 +119,11 @@ class DashboardScreen extends ConsumerWidget {
                                 mainAxisSpacing: VivSpacing.space4,
                                 childAspectRatio: 1.25,
                               ),
-                              itemBuilder: (context, index) => _buildChapterBentoCard(context, chapters[index]),
+                              itemBuilder: (context, index) => _buildChapterBentoCard(
+                                context,
+                                chapters[index],
+                                completedChapters.contains(chapters[index].routePath),
+                              ),
                             ),
                           ],
                         ),
@@ -145,7 +155,11 @@ class DashboardScreen extends ConsumerWidget {
                       const SizedBox(height: VivSpacing.space3),
                       ...chapters.map((chapter) => Padding(
                             padding: const EdgeInsets.only(bottom: VivSpacing.space4),
-                            child: _buildChapterMobileCard(context, chapter),
+                            child: _buildChapterMobileCard(
+                              context,
+                              chapter,
+                              completedChapters.contains(chapter.routePath),
+                            ),
                           )),
                       const SizedBox(height: VivSpacing.space5),
                       _buildRecentBookmarksWidget(context, ref, bookmarkedIds),
@@ -162,7 +176,38 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
+  Widget _buildHeroSection(
+    BuildContext context,
+    int completedCount,
+    double progressPercent,
+    Set<String> completedChapters,
+  ) {
+    String nextTargetPath = '/chapter-1';
+    String buttonText = 'Commencer le Chapitre 1';
+    IconData buttonIcon = LucideIcons.play;
+
+    if (!completedChapters.contains('/chapter-1')) {
+      nextTargetPath = '/chapter-1';
+      buttonText = 'Commencer le Chapitre 1';
+      buttonIcon = LucideIcons.play;
+    } else if (!completedChapters.contains('/chapter-2')) {
+      nextTargetPath = '/chapter-2';
+      buttonText = 'Continuer au Chapitre 2';
+      buttonIcon = LucideIcons.arrowRight;
+    } else if (!completedChapters.contains('/chapter-3')) {
+      nextTargetPath = '/chapter-3';
+      buttonText = 'Continuer au Chapitre 3';
+      buttonIcon = LucideIcons.arrowRight;
+    } else if (!completedChapters.contains('/basics-101')) {
+      nextTargetPath = '/basics-101';
+      buttonText = 'Étudier Basics 101';
+      buttonIcon = LucideIcons.compass;
+    } else {
+      nextTargetPath = '/program';
+      buttonText = 'Voir le programme complet';
+      buttonIcon = LucideIcons.bookOpen;
+    }
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -217,9 +262,48 @@ class DashboardScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: VivSpacing.space5),
+                // Progression indicators
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 400),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Progression globale : $completedCount/4 chapitres',
+                            style: VivTypography.small.copyWith(
+                              color: VivColors.gray300,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${(progressPercent * 100).toInt()}%',
+                            style: VivTypography.small.copyWith(
+                              color: VivColors.lime,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: VivSpacing.space2),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(VivSpacing.radiusSm),
+                        child: LinearProgressIndicator(
+                          value: progressPercent,
+                          backgroundColor: Colors.white.withValues(alpha: 0.1),
+                          valueColor: const AlwaysStoppedAnimation<Color>(VivColors.lime),
+                          minHeight: 6,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: VivSpacing.space6),
                 ElevatedButton(
-                  onPressed: () => context.go('/chapter-1'),
+                  onPressed: () => context.go(nextTargetPath),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: VivColors.lime,
                     foregroundColor: VivColors.black,
@@ -235,10 +319,10 @@ class DashboardScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(LucideIcons.play, size: 16),
+                      Icon(buttonIcon, size: 16),
                       const SizedBox(width: VivSpacing.space2),
                       Text(
-                        'Commencer le Chapitre 1',
+                        buttonText,
                         style: VivTypography.body.copyWith(
                           fontWeight: FontWeight.bold,
                           color: VivColors.black,
@@ -255,7 +339,11 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildChapterBentoCard(BuildContext context, DashboardChapterData chapter) {
+  Widget _buildChapterBentoCard(
+    BuildContext context,
+    DashboardChapterData chapter,
+    bool isCompleted,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: VivColors.paper,
@@ -292,12 +380,25 @@ class DashboardScreen extends ConsumerWidget {
                       size: 20,
                     ),
                   ),
-                  Text(
-                    'CHAPITRE 0${chapter.id}',
-                    style: VivTypography.eyebrow.copyWith(
-                      color: VivColors.gray400,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (isCompleted) ...[
+                        const Icon(
+                          LucideIcons.check,
+                          color: VivColors.limeDeep,
+                          size: 14,
+                        ),
+                        const SizedBox(width: 4),
+                      ],
+                      Text(
+                        isCompleted ? 'COMPLÉTÉ' : 'CHAPITRE 0${chapter.id}',
+                        style: VivTypography.eyebrow.copyWith(
+                          color: isCompleted ? VivColors.limeDeep : VivColors.gray400,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -344,7 +445,11 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildChapterMobileCard(BuildContext context, DashboardChapterData chapter) {
+  Widget _buildChapterMobileCard(
+    BuildContext context,
+    DashboardChapterData chapter,
+    bool isCompleted,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: VivColors.paper,
@@ -368,7 +473,9 @@ class DashboardScreen extends ConsumerWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        trailing: const Icon(LucideIcons.chevronRight, size: 16, color: VivColors.gray400),
+        trailing: isCompleted
+            ? const Icon(LucideIcons.check, size: 16, color: VivColors.limeDeep)
+            : const Icon(LucideIcons.chevronRight, size: 16, color: VivColors.gray400),
         onTap: () => context.go(chapter.routePath),
       ),
     );

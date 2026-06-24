@@ -2,12 +2,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:go_router/go_router.dart';
 import '../models/content_module.dart';
 import 'content_module_renderer.dart';
 import 'chapter_outline_widget.dart';
+import '../theme/viv_colors.dart';
 import '../theme/viv_spacing.dart';
+import '../theme/viv_typography.dart';
 import '../router/app_router.dart';
 import '../storage/bookmarks_provider.dart';
+import '../storage/chapter_progress_provider.dart';
 
 class ChapterScaffold extends ConsumerStatefulWidget {
   final String title;
@@ -140,25 +144,29 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
               bottom: VivSpacing.space6,
               right: 80, // Marge de respiration pour le sommaire
             ),
-            child: Column(
+             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.modules.map((module) {
-                _moduleKeys.putIfAbsent(module.id, () => GlobalKey());
-                final isBookmarked = bookmarks.contains(module.id);
-                return Container(
-                  key: _moduleKeys[module.id],
-                  child: ContentModuleRenderer(
-                    module: module,
-                    isBookmarked: isBookmarked,
-                    onBookmarkToggle: () {
-                      ref.read(bookmarksProvider.notifier).toggleBookmark(module.id);
-                    },
-                    onImageTap: (path, caption) {
-                      _showFullscreenImage(context, path, caption);
-                    },
-                  ),
-                );
-              }).toList(),
+              children: [
+                _buildPreviousButton(context),
+                ...widget.modules.map((module) {
+                  _moduleKeys.putIfAbsent(module.id, () => GlobalKey());
+                  final isBookmarked = bookmarks.contains(module.id);
+                  return Container(
+                    key: _moduleKeys[module.id],
+                    child: ContentModuleRenderer(
+                      module: module,
+                      isBookmarked: isBookmarked,
+                      onBookmarkToggle: () {
+                        ref.read(bookmarksProvider.notifier).toggleBookmark(module.id);
+                      },
+                      onImageTap: (path, caption) {
+                        _showFullscreenImage(context, path, caption);
+                      },
+                    ),
+                  );
+                }),
+                _buildBottomActions(context, ref),
+              ],
             ),
           ),
         ),
@@ -302,6 +310,152 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
           ),
         );
       },
+    );
+  }
+
+  String _getPathForBranchIndex(int index) {
+    switch (index) {
+      case 3:
+        return '/basics-101';
+      case 4:
+        return '/chapter-1';
+      case 5:
+        return '/chapter-2';
+      case 6:
+        return '/chapter-3';
+      default:
+        return '/dashboard';
+    }
+  }
+
+  String _getTitleForBranchIndex(int index) {
+    switch (index) {
+      case 3:
+        return 'Basics 101';
+      case 4:
+        return 'Chapitre 1';
+      case 5:
+        return 'Chapitre 2';
+      case 6:
+        return 'Chapitre 3';
+      default:
+        return '';
+    }
+  }
+
+  Widget _buildPreviousButton(BuildContext context) {
+    if (widget.branchIndex <= 3) return const SizedBox.shrink();
+
+    final prevIndex = widget.branchIndex - 1;
+    final prevTitle = _getTitleForBranchIndex(prevIndex);
+    final prevPath = _getPathForBranchIndex(prevIndex);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: VivSpacing.space4),
+      child: TextButton.icon(
+        onPressed: () => context.go(prevPath),
+        icon: const Icon(LucideIcons.chevronLeft, size: 16, color: VivColors.gray500),
+        label: Text(
+          'Chapitre précédent : $prevTitle',
+          style: VivTypography.small.copyWith(
+            color: VivColors.gray500,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomActions(BuildContext context, WidgetRef ref) {
+    final currentPath = _getPathForBranchIndex(widget.branchIndex);
+    final completedChapters = ref.watch(chapterProgressProvider);
+    final isCompleted = completedChapters.contains(currentPath);
+
+    final hasNext = widget.branchIndex < 6;
+    final nextIndex = widget.branchIndex + 1;
+    final nextTitle = _getTitleForBranchIndex(nextIndex);
+    final nextPath = _getPathForBranchIndex(nextIndex);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: VivSpacing.space6),
+        const Divider(color: VivColors.gray200, height: 1),
+        const SizedBox(height: VivSpacing.space6),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  ref.read(chapterProgressProvider.notifier).toggleCompletion(currentPath);
+                },
+                icon: Icon(
+                  isCompleted ? LucideIcons.check : LucideIcons.square,
+                  size: 16,
+                  color: isCompleted ? VivColors.limeDeep : VivColors.gray500,
+                ),
+                label: Text(
+                  isCompleted ? 'Complété !' : 'Marquer comme terminé',
+                  style: TextStyle(
+                    color: isCompleted ? VivColors.limeDeep : VivColors.ink700,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isCompleted
+                      ? VivColors.lime.withValues(alpha: 0.15)
+                      : VivColors.paper,
+                  foregroundColor: isCompleted ? VivColors.limeDeep : VivColors.ink700,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: VivSpacing.space4,
+                    vertical: VivSpacing.space3,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
+                    side: BorderSide(
+                      color: isCompleted
+                          ? VivColors.lime.withValues(alpha: 0.3)
+                          : VivColors.gray300,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            if (hasNext)
+              ElevatedButton.icon(
+                onPressed: () => context.go(nextPath),
+                icon: const Icon(LucideIcons.arrowRight, size: 16, color: VivColors.black),
+                label: Text(
+                  'Chapitre suivant : $nextTitle',
+                  style: const TextStyle(
+                    color: VivColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: VivColors.lime,
+                  foregroundColor: VivColors.black,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: VivSpacing.space4,
+                    vertical: VivSpacing.space3,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
