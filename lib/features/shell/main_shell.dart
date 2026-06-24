@@ -20,6 +20,8 @@ class MainShell extends ConsumerStatefulWidget {
 
 class _MainShellState extends ConsumerState<MainShell> {
   bool _isSidebarCollapsed = false;
+  bool _isBasicsExpanded = true;
+  bool _isFormationExpanded = true;
 
   static const Map<int, String> _routeTitles = {
     0: 'Tableau de bord',
@@ -151,67 +153,79 @@ class _MainShellState extends ConsumerState<MainShell> {
                           ),
                           const SizedBox(height: VivSpacing.space4),
                           if (!isCompact)
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: VivSpacing.space3,
-                                vertical: VivSpacing.space2,
-                              ),
-                              child: Text(
-                                'LES BASES',
-                                style: TextStyle(
-                                  color: VivColors.gray500,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
+                            _buildSectionHeader(
+                              title: 'LES BASES',
+                              isExpanded: _isBasicsExpanded,
+                              onTap: () {
+                                setState(() {
+                                  _isBasicsExpanded = !_isBasicsExpanded;
+                                });
+                              },
                             ),
-                          _buildNavItem(
-                            icon: LucideIcons.compass,
-                            title: _routeTitles[3]!,
-                            index: 3,
-                            selectedIndex: selectedIndex,
-                            isCompact: isCompact,
+                          AnimatedSize(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            alignment: Alignment.topCenter,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (_isBasicsExpanded || isCompact) ...[
+                                  _buildNavItem(
+                                    icon: LucideIcons.compass,
+                                    title: _routeTitles[3]!,
+                                    index: 3,
+                                    selectedIndex: selectedIndex,
+                                    isCompact: isCompact,
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
                           const SizedBox(height: VivSpacing.space4),
                           if (!isCompact)
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: VivSpacing.space3,
-                                vertical: VivSpacing.space2,
-                              ),
-                              child: Text(
-                                'FORMATION',
-                                style: TextStyle(
-                                  color: VivColors.gray500,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
+                            _buildSectionHeader(
+                              title: 'FORMATION',
+                              isExpanded: _isFormationExpanded,
+                              onTap: () {
+                                setState(() {
+                                  _isFormationExpanded = !_isFormationExpanded;
+                                });
+                              },
                             ),
-                          _buildNavItem(
-                            icon: LucideIcons.film,
-                            title: _routeTitles[4]!,
-                            index: 4,
-                            selectedIndex: selectedIndex,
-                            isCompact: isCompact,
-                          ),
-                          const SizedBox(height: VivSpacing.space1),
-                          _buildNavItem(
-                            icon: LucideIcons.shapes,
-                            title: _routeTitles[5]!,
-                            index: 5,
-                            selectedIndex: selectedIndex,
-                            isCompact: isCompact,
-                          ),
-                          const SizedBox(height: VivSpacing.space1),
-                          _buildNavItem(
-                            icon: LucideIcons.image,
-                            title: _routeTitles[6]!,
-                            index: 6,
-                            selectedIndex: selectedIndex,
-                            isCompact: isCompact,
+                          AnimatedSize(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            alignment: Alignment.topCenter,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (_isFormationExpanded || isCompact) ...[
+                                  _buildNavItem(
+                                    icon: LucideIcons.film,
+                                    title: _routeTitles[4]!,
+                                    index: 4,
+                                    selectedIndex: selectedIndex,
+                                    isCompact: isCompact,
+                                  ),
+                                  const SizedBox(height: VivSpacing.space1),
+                                  _buildNavItem(
+                                    icon: LucideIcons.shapes,
+                                    title: _routeTitles[5]!,
+                                    index: 5,
+                                    selectedIndex: selectedIndex,
+                                    isCompact: isCompact,
+                                  ),
+                                  const SizedBox(height: VivSpacing.space1),
+                                  _buildNavItem(
+                                    icon: LucideIcons.image,
+                                    title: _routeTitles[6]!,
+                                    index: 6,
+                                    selectedIndex: selectedIndex,
+                                    isCompact: isCompact,
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -375,6 +389,45 @@ class _MainShellState extends ConsumerState<MainShell> {
                   ),
                 ),
               ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader({
+    required String title,
+    required bool isExpanded,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(VivSpacing.radiusSm),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: VivSpacing.space3,
+            vertical: VivSpacing.space2,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: VivColors.gray500,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              Icon(
+                isExpanded ? LucideIcons.chevronDown : LucideIcons.chevronRight,
+                color: VivColors.gray500,
+                size: 14,
+              ),
             ],
           ),
         ),
