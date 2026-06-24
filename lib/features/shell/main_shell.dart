@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -66,26 +65,9 @@ class _MainShellState extends ConsumerState<MainShell> {
       }
     });
 
-    return CallbackShortcuts(
-      bindings: {
-        const SingleActivator(LogicalKeyboardKey.keyF, control: true): () {
-          setState(() {
-            _isSearchActive = true;
-          });
-        },
-        const SingleActivator(LogicalKeyboardKey.escape): () {
-          if (_isSearchActive) {
-            setState(() {
-              _isSearchActive = false;
-              _searchController.clear();
-              _searchResults.clear();
-            });
-          }
-        },
-      },
-      child: Stack(
-        children: [
-          Scaffold(
+    return Stack(
+      children: [
+        Scaffold(
             backgroundColor: VivColors.offWhite,
             body: Row(
               children: [
@@ -363,8 +345,7 @@ class _MainShellState extends ConsumerState<MainShell> {
           if (_isSearchActive)
             _buildSearchOverlay(context),
         ],
-      ),
-    );
+      );
   }
 
   String _getTitle(int index) {
@@ -476,60 +457,21 @@ class _MainShellState extends ConsumerState<MainShell> {
   }
 
   Widget _buildSearchField(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isSearchActive = true;
-        });
-      },
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Container(
-          width: 240,
-          height: 36,
-          margin: const EdgeInsets.only(right: VivSpacing.space3),
-          padding: const EdgeInsets.symmetric(horizontal: VivSpacing.space3),
-          decoration: BoxDecoration(
-            color: VivColors.gray100,
-            borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
-            border: Border.all(color: VivColors.gray200),
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                LucideIcons.search,
-                size: 16,
-                color: VivColors.gray500,
-              ),
-              const SizedBox(width: VivSpacing.space2),
-              const Expanded(
-                child: Text(
-                  'Rechercher...',
-                  style: TextStyle(
-                    color: VivColors.gray500,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: VivColors.paper,
-                  borderRadius: BorderRadius.circular(VivSpacing.radiusSm),
-                  border: Border.all(color: VivColors.gray200),
-                ),
-                child: const Text(
-                  'Ctrl F',
-                  style: TextStyle(
-                    color: VivColors.gray500,
-                    fontSize: 9,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(right: VivSpacing.space2),
+      child: IconButton(
+        onPressed: () {
+          setState(() {
+            _isSearchActive = true;
+          });
+        },
+        icon: const Icon(
+          LucideIcons.search,
+          size: 20,
+          color: VivColors.black,
         ),
+        hoverColor: VivColors.gray100,
+        splashRadius: 20,
       ),
     );
   }
@@ -771,7 +713,7 @@ class _MainShellState extends ConsumerState<MainShell> {
           const SizedBox(height: VivSpacing.space5),
           const Center(
             child: Text(
-              'Astuce : Utilisez Ctrl + F pour ouvrir et Échap pour fermer la recherche.',
+              'Astuce : Cliquez en dehors de la boîte de recherche pour la fermer.',
               style: TextStyle(
                 color: VivColors.gray400,
                 fontSize: 11,
