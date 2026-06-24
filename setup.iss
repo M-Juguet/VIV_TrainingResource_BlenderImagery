@@ -2,7 +2,7 @@
 ; REMARQUE : La valeur de AppId identifie l'application. Ne la modifiez pas si vous publiez des mises à jour !
 AppId={{9C9E1B23-C2A8-4395-8F12-88E6A6A5E3E7}
 AppName=Blender Imagery
-AppVersion=0.1.0
+AppVersion=0.1.1
 AppPublisher=VIV
 ; Installation au niveau utilisateur pour éviter l'UAC (nécessaire pour les MAJ automatiques silencieuses)
 DefaultDirName={userpf}\BlenderImagery
@@ -10,7 +10,7 @@ DefaultGroupName=VIV Formation
 SetupIconFile=windows\runner\resources\app_icon.ico
 PrivilegesRequired=lowest
 OutputDir=Output
-OutputBaseFilename=blender_imagery_setup_v0.1.0
+OutputBaseFilename=blender_imagery_setup_v0.1.1
 Compression=lzma
 SolidCompression=yes
 ; Force la fermeture de l'application Flutter en cours d'exécution
