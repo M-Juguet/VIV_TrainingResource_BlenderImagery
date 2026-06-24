@@ -11,6 +11,7 @@ import '../../features/chapter_2/chapter_2_screen.dart';
 import '../../features/chapter_3/chapter_3_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/shell/main_shell.dart';
+import '../widgets/update_listener_wrapper.dart';
 
 class ActiveBranchIndexNotifier extends Notifier<int> {
   @override
@@ -31,7 +32,9 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
-          return MainShell(navigationShell: navigationShell);
+          return UpdateListenerWrapper(
+            child: MainShell(navigationShell: navigationShell),
+          );
         },
         branches: [
           StatefulShellBranch(

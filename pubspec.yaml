@@ -18,6 +18,9 @@ dependencies:
   go_router: ^14.8.0
   url_launcher: ^6.3.1
   cached_network_image: ^3.4.1
+  dio: ^5.9.2
+  package_info_plus: ^10.1.0
+  flutter_markdown: ^0.7.7+1
 
 dev_dependencies:
   flutter_test:
