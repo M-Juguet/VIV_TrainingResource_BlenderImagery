@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/content_module.dart';
 import 'content_module_renderer.dart';
 import 'chapter_outline_widget.dart';
@@ -228,11 +229,41 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
                       maxScale: 5.0,
                       clipBehavior: Clip.none,
                       child: isNetwork
-                          ? Image.network(
-                              imagePath,
+                          ? CachedNetworkImage(
+                              imageUrl: imagePath,
                               fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(LucideIcons.image, size: 64, color: Colors.white30),
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    LucideIcons.cloudOff,
+                                    color: Colors.white30,
+                                    size: 64,
+                                  ),
+                                  const SizedBox(height: VivSpacing.space3),
+                                  Text(
+                                    'Image indisponible hors ligne',
+                                    style: VivTypography.body.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: VivSpacing.space2),
+                                  Text(
+                                    'Cette image sera automatiquement mise en cache lors de sa première consultation en ligne afin d\'être visible hors ligne.',
+                                    style: VivTypography.small.copyWith(
+                                      color: Colors.white70,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
                             )
                           : Image.asset(
                               imagePath,

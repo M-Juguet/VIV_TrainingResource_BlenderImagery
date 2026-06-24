@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/content_module.dart';
 import '../theme/viv_colors.dart';
@@ -195,10 +196,11 @@ class ContentModuleRenderer extends StatelessWidget {
                 maxHeight: isFullWidth ? 450.0 : 300.0,
               ),
               child: imagePath.startsWith('http')
-                  ? Image.network(
-                      imagePath,
+                  ? CachedNetworkImage(
+                      imageUrl: imagePath,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) =>
+                      placeholder: (context, url) => _PulsingImagePlaceholder(isFullWidth: isFullWidth),
+                      errorWidget: (context, url, error) =>
                           _buildErrorPlaceholder(isFullWidth, imagePath),
                     )
                   : Image.asset(
@@ -227,24 +229,90 @@ class ContentModuleRenderer extends StatelessWidget {
   Widget _buildErrorPlaceholder(bool isFullWidth, String path) {
     return Container(
       height: isFullWidth ? 300 : 200,
-      color: VivColors.offWhite,
-      alignment: Alignment.center,
+      width: double.infinity,
+      color: VivColors.gray100,
+      padding: const EdgeInsets.symmetric(horizontal: VivSpacing.space6, vertical: VivSpacing.space4),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(
-            LucideIcons.image,
+            LucideIcons.cloudOff,
             color: VivColors.gray400,
-            size: 36,
+            size: 32,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: VivSpacing.space3),
           Text(
-            'Média Placeholder\n($path)',
+            'Image indisponible hors ligne',
+            style: VivTypography.body.copyWith(
+              color: VivColors.ink,
+              fontWeight: FontWeight.bold,
+            ),
             textAlign: TextAlign.center,
-            style: VivTypography.small.copyWith(color: VivColors.gray400),
+          ),
+          const SizedBox(height: VivSpacing.space2),
+          Text(
+            'Cette image sera automatiquement mise en cache lors de sa première consultation en ligne afin d\'être visible hors ligne.',
+            style: VivTypography.small.copyWith(
+              color: VivColors.gray500,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PulsingImagePlaceholder extends StatefulWidget {
+  final bool isFullWidth;
+  const _PulsingImagePlaceholder({required this.isFullWidth});
+
+  @override
+  State<_PulsingImagePlaceholder> createState() => _PulsingImagePlaceholderState();
+}
+
+class _PulsingImagePlaceholderState extends State<_PulsingImagePlaceholder>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true);
+    _colorAnimation = ColorTween(
+      begin: VivColors.gray100,
+      end: VivColors.gray200,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _colorAnimation,
+      builder: (context, child) {
+        return Container(
+          height: widget.isFullWidth ? 300 : 200,
+          width: double.infinity,
+          color: _colorAnimation.value,
+          child: const Center(
+            child: Icon(
+              LucideIcons.image,
+              color: VivColors.gray300,
+              size: 40,
+            ),
+          ),
+        );
+      },
     );
   }
 }
