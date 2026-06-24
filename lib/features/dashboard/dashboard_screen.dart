@@ -50,21 +50,21 @@ class DashboardScreen extends ConsumerWidget {
       id: 1,
       title: 'Chapitre 1 : Fondamentaux du Shading & LookDev',
       objective: 'Maîtrisez les concepts clés du shading PBR, le Shader Editor et le nœud universel Principled BSDF.',
-      icon: LucideIcons.film,
+      icon: LucideIcons.palette,
       routePath: '/chapter-1',
     ),
     DashboardChapterData(
       id: 2,
-      title: 'Chapitre 2 : Approfondissement et Modélisation',
-      objective: 'Apprenez à modéliser des objets complexes et à structurer vos scènes.',
-      icon: LucideIcons.shapes,
+      title: 'Chapitre 2 : Texturage Agile & Gestion Simplifiée des UVs',
+      objective: 'Maîtrisez le dépliage UV (Smart UV Project), le mapping de textures, la projection Box et l\'Asset Browser.',
+      icon: LucideIcons.layers,
       routePath: '/chapter-2',
     ),
     DashboardChapterData(
       id: 3,
-      title: 'Chapitre 3 : Rendu et Synthèse',
-      objective: 'Configurez vos lumières, textures et caméras pour produire un rendu final.',
-      icon: LucideIcons.image,
+      title: 'Chapitre 3 : Mise en lumière & Méthodes de Rendu',
+      objective: 'Maîtrisez les moteurs EEVEE/Cycles, l\'éclairage de studio, les environnements HDRI et le paramétrage caméra.',
+      icon: LucideIcons.lightbulb,
       routePath: '/chapter-3',
     ),
   ];
@@ -502,8 +502,8 @@ class DashboardScreen extends ConsumerWidget {
 
     recentBookmark = findBookmark(basics101Modules, 'Basics 101', '/basics-101') ??
         findBookmark(chapter1Modules, 'Fondamentaux du Shading & LookDev', '/chapter-1') ??
-        findBookmark(chapter2Modules, 'Chapitre 2', '/chapter-2') ??
-        findBookmark(chapter3Modules, 'Chapitre 3', '/chapter-3');
+        findBookmark(chapter2Modules, 'Texturage Agile & Gestion Simplifiée des UVs', '/chapter-2') ??
+        findBookmark(chapter3Modules, 'Mise en lumière & Méthodes de Rendu', '/chapter-3');
 
     return Container(
       width: double.infinity,

@@ -49,13 +49,13 @@ const List<SearchChapterSource> searchSources = [
     modules: chapter1Modules,
   ),
   SearchChapterSource(
-    title: 'Chapitre 2',
+    title: 'Texturage Agile & Gestion Simplifiée des UVs',
     routePath: '/chapter-2',
     index: 5,
     modules: chapter2Modules,
   ),
   SearchChapterSource(
-    title: 'Chapitre 3',
+    title: 'Mise en lumière & Méthodes de Rendu',
     routePath: '/chapter-3',
     index: 6,
     modules: chapter3Modules,

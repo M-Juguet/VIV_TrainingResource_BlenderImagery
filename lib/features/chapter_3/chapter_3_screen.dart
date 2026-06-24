@@ -15,7 +15,7 @@ class Chapter3Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChapterScaffold(
-      title: 'Chapitre 3',
+      title: 'Mise en lumière & Méthodes de Rendu',
       modules: chapter3Modules,
       targetModuleId: targetModuleId,
       branchIndex: 6,

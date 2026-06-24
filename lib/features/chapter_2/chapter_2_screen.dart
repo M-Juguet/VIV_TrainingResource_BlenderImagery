@@ -15,7 +15,7 @@ class Chapter2Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChapterScaffold(
-      title: 'Chapitre 2',
+      title: 'Texturage Agile & Gestion Simplifiée des UVs',
       modules: chapter2Modules,
       targetModuleId: targetModuleId,
       branchIndex: 5,

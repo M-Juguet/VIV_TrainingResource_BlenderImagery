@@ -43,8 +43,8 @@ class _MainShellState extends ConsumerState<MainShell> {
     2: 'Mes signets',
     3: 'Basics 101',
     4: 'Shading & LookDev',
-    5: 'Chapitre 2',
-    6: 'Chapitre 3',
+    5: 'Texturage Agile & UVs',
+    6: 'Lumière & Rendu',
     7: 'Paramètres',
   };
 
@@ -217,7 +217,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                     children: [
                                       if (_isFormationExpanded || isCompact) ...[
                                         _buildNavItem(
-                                          icon: LucideIcons.film,
+                                          icon: LucideIcons.palette,
                                           title: _routeTitles[4]!,
                                           index: 4,
                                           selectedIndex: selectedIndex,
@@ -225,7 +225,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                         ),
                                         const SizedBox(height: VivSpacing.space1),
                                         _buildNavItem(
-                                          icon: LucideIcons.shapes,
+                                          icon: LucideIcons.layers,
                                           title: _routeTitles[5]!,
                                           index: 5,
                                           selectedIndex: selectedIndex,
@@ -233,7 +233,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                         ),
                                         const SizedBox(height: VivSpacing.space1),
                                         _buildNavItem(
-                                          icon: LucideIcons.image,
+                                          icon: LucideIcons.lightbulb,
                                           title: _routeTitles[6]!,
                                           index: 6,
                                           selectedIndex: selectedIndex,
@@ -612,20 +612,20 @@ class _MainShellState extends ConsumerState<MainShell> {
       },
       {
         'title': 'Chapitre 1',
-        'subtitle': 'Introduction et Mise en place de projet',
-        'icon': LucideIcons.film,
+        'subtitle': 'Fondamentaux du Shading & LookDev',
+        'icon': LucideIcons.palette,
         'route': '/chapter-1',
       },
       {
         'title': 'Chapitre 2',
-        'subtitle': 'Approfondissement et Modélisation technique',
-        'icon': LucideIcons.shapes,
+        'subtitle': 'Texturage Agile & Gestion Simplifiée des UVs',
+        'icon': LucideIcons.layers,
         'route': '/chapter-2',
       },
       {
         'title': 'Chapitre 3',
-        'subtitle': 'Rendu final, Défi pratique et Quiz',
-        'icon': LucideIcons.image,
+        'subtitle': 'Mise en lumière & Méthodes de Rendu',
+        'icon': LucideIcons.lightbulb,
         'route': '/chapter-3',
       },
     ];
