@@ -43,7 +43,7 @@ const List<SearchChapterSource> searchSources = [
     modules: basics101Modules,
   ),
   SearchChapterSource(
-    title: 'Chapitre 1',
+    title: 'Fondamentaux du Shading & LookDev',
     routePath: '/chapter-1',
     index: 4,
     modules: chapter1Modules,

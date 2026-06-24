@@ -40,14 +40,17 @@ class ProgramScreen extends StatelessWidget {
   static const List<Chapter> chapters = [
     Chapter(
       id: 1,
-      title: 'Chapitre 1',
-      objective: 'Objectif pédagogique du premier chapitre. Description des compétences clés à acquérir lors de cette introduction.',
+      title: 'Chapitre 1 : Shading & LookDev',
+      objective: 'Comprendre le shading physique PBR, manipuler l\'éditeur de nœuds et le Principled BSDF, et créer des matériaux procéduraux.',
       icon: LucideIcons.film,
       routePath: '/chapter-1',
       points: [
-        ChapterPoint(label: 'Analyse globale', targetModuleId: 'ch1_text1'),
-        ChapterPoint(label: 'Représentation visuelle', targetModuleId: 'ch1_side'),
-        ChapterPoint(label: 'Note d\'information', targetModuleId: 'ch1_info'),
+        ChapterPoint(label: 'Le shading physique (PBR)', targetModuleId: 'ch1_sec1_title'),
+        ChapterPoint(label: 'L\'éditeur de nœuds', targetModuleId: 'ch1_sec2_title'),
+        ChapterPoint(label: 'Le Principled BSDF en détail', targetModuleId: 'ch1_sec3_title'),
+        ChapterPoint(label: 'Finitions industrielles types', targetModuleId: 'ch1_sec4_title'),
+        ChapterPoint(label: 'Les nœuds de réglage', targetModuleId: 'ch1_sec5_title'),
+        ChapterPoint(label: 'Masques procéduraux', targetModuleId: 'ch1_sec6_title'),
       ],
     ),
     Chapter(

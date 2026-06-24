@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/models/content_module.dart';
 import '../../../core/theme/viv_colors.dart';
@@ -81,13 +83,46 @@ class InfoModuleWidget extends StatelessWidget {
           const SizedBox(height: VivSpacing.space2),
           Padding(
             padding: const EdgeInsets.only(left: 34), // Icon size 22 + spacing 12
-            child: Text(
-              module.text,
-              style: VivTypography.body.copyWith(
-                color: VivColors.ink800,
-                fontSize: 15,
-                height: 1.5,
+            child: MarkdownBody(
+              data: module.text,
+              styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                p: VivTypography.body.copyWith(
+                  color: VivColors.ink800,
+                  fontSize: 15,
+                  height: 1.5,
+                ),
+                strong: VivTypography.body.copyWith(
+                  color: VivColors.ink800,
+                  fontSize: 15,
+                  height: 1.5,
+                  fontWeight: FontWeight.bold,
+                ),
+                em: VivTypography.body.copyWith(
+                  color: VivColors.ink800,
+                  fontSize: 15,
+                  height: 1.5,
+                  fontStyle: FontStyle.italic,
+                ),
+                code: const TextStyle(
+                  fontFamily: 'monospace',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFFC7254E),
+                  backgroundColor: Color(0xFFEFF1F3),
+                ),
               ),
+              onTapLink: (text, href, title) async {
+                if (href != null) {
+                  final uri = Uri.tryParse(href);
+                  if (uri != null) {
+                    try {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      // error handling
+                    }
+                  }
+                }
+              },
             ),
           ),
         ],

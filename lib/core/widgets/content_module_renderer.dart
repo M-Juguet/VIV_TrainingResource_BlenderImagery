@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/content_module.dart';
 import '../theme/viv_colors.dart';
@@ -9,6 +11,43 @@ import '../theme/viv_typography.dart';
 import 'modules/info_module_widget.dart';
 import 'modules/resource_module_widget.dart';
 import 'modules/quiz_module_widget.dart';
+
+
+MarkdownStyleSheet _buildMarkdownStyleSheet(BuildContext context, {Color? textColor}) {
+  final baseColor = textColor ?? VivColors.ink;
+  return MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+    p: VivTypography.body.copyWith(color: baseColor),
+    pPadding: const EdgeInsets.only(bottom: VivSpacing.space3),
+    strong: VivTypography.body.copyWith(color: baseColor, fontWeight: FontWeight.bold),
+    em: VivTypography.body.copyWith(color: baseColor, fontStyle: FontStyle.italic),
+    code: TextStyle(
+      fontFamily: 'monospace',
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: const Color(0xFFC7254E),
+      backgroundColor: const Color(0xFFEFF1F3),
+    ),
+    codeblockPadding: const EdgeInsets.all(VivSpacing.space3),
+    codeblockDecoration: BoxDecoration(
+      color: VivColors.gray100,
+      borderRadius: BorderRadius.circular(VivSpacing.radiusSm),
+    ),
+    listBullet: VivTypography.body.copyWith(color: baseColor),
+  );
+}
+
+Future<void> _handleLinkTap(String text, String? href, String title) async {
+  if (href != null) {
+    final uri = Uri.tryParse(href);
+    if (uri != null) {
+      try {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } catch (e) {
+        // error handling
+      }
+    }
+  }
+}
 
 class ContentModuleRenderer extends StatelessWidget {
   final ContentModule module;
@@ -73,7 +112,6 @@ class ContentModuleRenderer extends StatelessWidget {
         ),
       );
     } else if (mod is TextModule) {
-      final paragraphs = mod.content.split('\n');
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -81,15 +119,11 @@ class ContentModuleRenderer extends StatelessWidget {
             Text(mod.title!, style: VivTypography.h3),
             const SizedBox(height: VivSpacing.space3),
           ],
-          ...paragraphs.where((p) => p.trim().isNotEmpty).map(
-                (p) => Padding(
-                  padding: const EdgeInsets.only(bottom: VivSpacing.space3),
-                  child: Text(
-                    p.trim(),
-                    style: VivTypography.body.copyWith(color: VivColors.ink),
-                  ),
-                ),
-              ),
+          MarkdownBody(
+            data: mod.content,
+            styleSheet: _buildMarkdownStyleSheet(context),
+            onTapLink: _handleLinkTap,
+          ),
         ],
       );
     } else if (mod is SideBySideModule) {
@@ -106,7 +140,11 @@ class ContentModuleRenderer extends StatelessWidget {
             children: [
               if (isTextLeft)
                 Expanded(
-                  child: Text(mod.content, style: VivTypography.body.copyWith(color: VivColors.ink)),
+                  child: MarkdownBody(
+                    data: mod.content,
+                    styleSheet: _buildMarkdownStyleSheet(context),
+                    onTapLink: _handleLinkTap,
+                  ),
                 ),
               if (isTextLeft) const SizedBox(width: VivSpacing.space6),
               Expanded(
@@ -115,7 +153,11 @@ class ContentModuleRenderer extends StatelessWidget {
               if (!isTextLeft) const SizedBox(width: VivSpacing.space6),
               if (!isTextLeft)
                 Expanded(
-                  child: Text(mod.content, style: VivTypography.body.copyWith(color: VivColors.ink)),
+                  child: MarkdownBody(
+                    data: mod.content,
+                    styleSheet: _buildMarkdownStyleSheet(context),
+                    onTapLink: _handleLinkTap,
+                  ),
                 ),
             ],
           ),
@@ -134,7 +176,11 @@ class ContentModuleRenderer extends StatelessWidget {
           Text(mod.title, style: VivTypography.h3),
           const SizedBox(height: VivSpacing.space3),
           if (mod.intro != null) ...[
-            Text(mod.intro!, style: VivTypography.body.copyWith(color: VivColors.ink)),
+            MarkdownBody(
+              data: mod.intro!,
+              styleSheet: _buildMarkdownStyleSheet(context),
+              onTapLink: _handleLinkTap,
+            ),
             const SizedBox(height: VivSpacing.space3),
           ],
           ...mod.items.map(
@@ -153,12 +199,15 @@ class ContentModuleRenderer extends StatelessWidget {
                   ),
                   const SizedBox(width: VivSpacing.space3),
                   Expanded(
-                    child: Text(
-                      item,
-                      style: VivTypography.body.copyWith(
-                        color: VivColors.ink,
-                        fontWeight: FontWeight.w500,
+                    child: MarkdownBody(
+                      data: item,
+                      styleSheet: _buildMarkdownStyleSheet(context).copyWith(
+                        p: VivTypography.body.copyWith(
+                          color: VivColors.ink,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
+                      onTapLink: _handleLinkTap,
                     ),
                   ),
                 ],
@@ -167,7 +216,11 @@ class ContentModuleRenderer extends StatelessWidget {
           ),
           if (mod.outro != null) ...[
             const SizedBox(height: VivSpacing.space3),
-            Text(mod.outro!, style: VivTypography.body.copyWith(color: VivColors.ink)),
+            MarkdownBody(
+              data: mod.outro!,
+              styleSheet: _buildMarkdownStyleSheet(context),
+              onTapLink: _handleLinkTap,
+            ),
           ],
         ],
       );

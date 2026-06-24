@@ -42,7 +42,7 @@ class _MainShellState extends ConsumerState<MainShell> {
     1: 'Programme',
     2: 'Mes signets',
     3: 'Basics 101',
-    4: 'Chapitre 1',
+    4: 'Shading & LookDev',
     5: 'Chapitre 2',
     6: 'Chapitre 3',
     7: 'Paramètres',

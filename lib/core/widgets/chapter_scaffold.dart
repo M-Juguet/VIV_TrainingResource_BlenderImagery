@@ -140,34 +140,39 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
           child: SingleChildScrollView(
             controller: _scrollController,
             padding: const EdgeInsets.only(
-              left: VivSpacing.space6,
               top: VivSpacing.space6,
               bottom: VivSpacing.space6,
               right: 80, // Marge de respiration pour le sommaire
             ),
-             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildPreviousButton(context),
-                ...widget.modules.map((module) {
-                  _moduleKeys.putIfAbsent(module.id, () => GlobalKey());
-                  final isBookmarked = bookmarks.contains(module.id);
-                  return Container(
-                    key: _moduleKeys[module.id],
-                    child: ContentModuleRenderer(
-                      module: module,
-                      isBookmarked: isBookmarked,
-                      onBookmarkToggle: () {
-                        ref.read(bookmarksProvider.notifier).toggleBookmark(module.id);
-                      },
-                      onImageTap: (path, caption) {
-                        _showFullscreenImage(context, path, caption);
-                      },
-                    ),
-                  );
-                }),
-                _buildBottomActions(context, ref),
-              ],
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 800),
+                padding: const EdgeInsets.symmetric(horizontal: VivSpacing.space6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPreviousButton(context),
+                    ...widget.modules.map((module) {
+                      _moduleKeys.putIfAbsent(module.id, () => GlobalKey());
+                      final isBookmarked = bookmarks.contains(module.id);
+                      return Container(
+                        key: _moduleKeys[module.id],
+                        child: ContentModuleRenderer(
+                          module: module,
+                          isBookmarked: isBookmarked,
+                          onBookmarkToggle: () {
+                            ref.read(bookmarksProvider.notifier).toggleBookmark(module.id);
+                          },
+                          onImageTap: (path, caption) {
+                            _showFullscreenImage(context, path, caption);
+                          },
+                        ),
+                      );
+                    }),
+                    _buildBottomActions(context, ref),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -364,7 +369,7 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
       case 3:
         return 'Basics 101';
       case 4:
-        return 'Chapitre 1';
+        return 'Shading & LookDev';
       case 5:
         return 'Chapitre 2';
       case 6:

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shadcn_ui/shadcn_ui.dart' hide LucideIcons;
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/models/content_module.dart';
 import '../../../core/theme/viv_colors.dart';
@@ -222,13 +224,46 @@ class _QuizModuleWidgetState extends State<QuizModuleWidget> {
             ],
           ),
           const SizedBox(height: VivSpacing.space3),
-          Text(
-            widget.module.explanation,
-            style: VivTypography.body.copyWith(
-              fontSize: 14,
-              height: 1.5,
-              color: VivColors.ink800,
+          MarkdownBody(
+            data: widget.module.explanation,
+            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+              p: VivTypography.body.copyWith(
+                fontSize: 14,
+                height: 1.5,
+                color: VivColors.ink800,
+              ),
+              strong: VivTypography.body.copyWith(
+                fontSize: 14,
+                height: 1.5,
+                color: VivColors.ink800,
+                fontWeight: FontWeight.bold,
+              ),
+              em: VivTypography.body.copyWith(
+                fontSize: 14,
+                height: 1.5,
+                color: VivColors.ink800,
+                fontStyle: FontStyle.italic,
+              ),
+              code: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFFC7254E),
+                backgroundColor: Color(0xFFEFF1F3),
+              ),
             ),
+            onTapLink: (text, href, title) async {
+              if (href != null) {
+                final uri = Uri.tryParse(href);
+                if (uri != null) {
+                  try {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  } catch (e) {
+                    // error handling
+                  }
+                }
+              }
+            },
           ),
           const SizedBox(height: VivSpacing.space4),
           SizedBox(

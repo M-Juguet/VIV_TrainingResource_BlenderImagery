@@ -48,8 +48,8 @@ class DashboardScreen extends ConsumerWidget {
   static const List<DashboardChapterData> chapters = [
     DashboardChapterData(
       id: 1,
-      title: 'Chapitre 1 : Introduction et Mise en place',
-      objective: 'Découvrez les bases fondamentales de l\'outil et préparez votre espace de travail.',
+      title: 'Chapitre 1 : Fondamentaux du Shading & LookDev',
+      objective: 'Maîtrisez les concepts clés du shading PBR, le Shader Editor et le nœud universel Principled BSDF.',
       icon: LucideIcons.film,
       routePath: '/chapter-1',
     ),
@@ -501,7 +501,7 @@ class DashboardScreen extends ConsumerWidget {
     }
 
     recentBookmark = findBookmark(basics101Modules, 'Basics 101', '/basics-101') ??
-        findBookmark(chapter1Modules, 'Chapitre 1', '/chapter-1') ??
+        findBookmark(chapter1Modules, 'Fondamentaux du Shading & LookDev', '/chapter-1') ??
         findBookmark(chapter2Modules, 'Chapitre 2', '/chapter-2') ??
         findBookmark(chapter3Modules, 'Chapitre 3', '/chapter-3');
 

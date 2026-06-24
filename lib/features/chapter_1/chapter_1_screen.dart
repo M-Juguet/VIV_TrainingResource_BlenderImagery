@@ -15,7 +15,7 @@ class Chapter1Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChapterScaffold(
-      title: 'Chapitre 1',
+      title: 'Fondamentaux du Shading & LookDev',
       modules: chapter1Modules,
       targetModuleId: targetModuleId,
       branchIndex: 4,

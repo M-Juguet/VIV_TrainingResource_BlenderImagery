@@ -48,7 +48,7 @@ class BookmarksScreen extends ConsumerWidget {
     }
 
     checkModules(basics101Modules, 'Basics 101', 0, '/basics-101');
-    checkModules(chapter1Modules, 'Chapitre 1', 1, '/chapter-1');
+    checkModules(chapter1Modules, 'Fondamentaux du Shading & LookDev', 1, '/chapter-1');
     checkModules(chapter2Modules, 'Chapitre 2', 2, '/chapter-2');
     checkModules(chapter3Modules, 'Chapitre 3', 3, '/chapter-3');
 
