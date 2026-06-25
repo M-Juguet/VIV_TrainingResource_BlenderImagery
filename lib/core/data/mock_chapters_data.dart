@@ -479,7 +479,7 @@ const List<ContentModule> chapter1Modules = [
     id: 'ch1_sec1_side1',
     title: 'L\'effet de la rugosité',
     content: 'Observez comment le reflet évolue de gauche à droite. À gauche, la rugosité nulle donne un reflet net, presque spéculaire, qui agit comme un miroir. À mesure que la rugosité augmente, le reflet s\'élargit, perd en intensité et finit par disparaître dans un aspect totalement mat à droite. C\'est exactement ce phénomène que vous reproduisez en ajustant une seule valeur dans le shader.',
-    imagePath: 'assets/images/placeholder_roughness_gradient_spheres_blender.jpg',
+    imagePath: 'assets/images/roughness_gradient_spheres_blender.jpg',
     caption: 'Figure 1.1 : Sept sphères identiques dont la rugosité croît de 0 (gauche) à 1 (droite), sous un même éclairage HDRI de studio.',
     layout: ContentLayout.textLeft,
   ),
