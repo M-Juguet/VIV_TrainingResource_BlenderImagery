@@ -623,8 +623,8 @@ class _MainShellState extends ConsumerState<MainShell> {
   Widget _buildSearchGuide(BuildContext context) {
     final List<Map<String, dynamic>> quickChapters = [
       {
-        'title': 'Basics 101',
-        'subtitle': 'Les notions et prérequis fondamentaux',
+        'title': 'Découverte & Prise en main',
+        'subtitle': 'Basics 101 • Notions et prérequis fondamentaux',
         'icon': LucideIcons.compass,
         'route': '/basics-101',
       },

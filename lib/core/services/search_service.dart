@@ -37,7 +37,7 @@ class SearchChapterSource {
 
 const List<SearchChapterSource> searchSources = [
   SearchChapterSource(
-    title: 'Basics 101',
+    title: 'Découverte & Prise en main',
     routePath: '/basics-101',
     index: 3,
     modules: basics101Modules,

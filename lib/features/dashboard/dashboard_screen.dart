@@ -211,7 +211,7 @@ class DashboardScreen extends ConsumerWidget {
       buttonIcon = LucideIcons.arrowRight;
     } else if (!completedChapters.contains('/basics-101')) {
       nextTargetPath = '/basics-101';
-      buttonText = 'Étudier Basics 101';
+      buttonText = 'Étudier Découverte & Prise en main';
       buttonIcon = LucideIcons.compass;
     } else {
       nextTargetPath = '/program';
@@ -511,7 +511,7 @@ class DashboardScreen extends ConsumerWidget {
       return null;
     }
 
-    recentBookmark = findBookmark(basics101Modules, 'Basics 101', '/basics-101') ??
+    recentBookmark = findBookmark(basics101Modules, 'Découverte & Prise en main', '/basics-101') ??
         findBookmark(chapter1Modules, 'Fondamentaux du Shading & LookDev', '/chapter-1') ??
         findBookmark(chapter2Modules, 'Texturage Agile & Gestion Simplifiée des UVs', '/chapter-2') ??
         findBookmark(chapter3Modules, 'Mise en lumière & Méthodes de Rendu', '/chapter-3') ??

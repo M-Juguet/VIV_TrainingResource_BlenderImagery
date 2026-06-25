@@ -366,11 +366,15 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
       case 3:
         return '/basics-101';
       case 4:
-        return '/chapter-1';
+        return '/basics-102';
       case 5:
-        return '/chapter-2';
+        return '/chapter-1';
       case 6:
+        return '/chapter-2';
+      case 7:
         return '/chapter-3';
+      case 8:
+        return '/chapter-4';
       default:
         return '/dashboard';
     }
@@ -379,13 +383,17 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
   String _getTitleForBranchIndex(int index) {
     switch (index) {
       case 3:
-        return 'Basics 101';
+        return 'Découverte & Prise en main';
       case 4:
-        return 'Shading & LookDev';
+        return 'Basics 102';
       case 5:
-        return 'Chapitre 2';
+        return 'Shading & LookDev';
       case 6:
+        return 'Chapitre 2';
+      case 7:
         return 'Chapitre 3';
+      case 8:
+        return 'Chapitre 4';
       default:
         return '';
     }
@@ -393,6 +401,7 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
 
   Widget _buildPreviousButton(BuildContext context) {
     if (widget.branchIndex <= 3) return const SizedBox.shrink();
+    if (widget.branchIndex == 5) return const SizedBox.shrink();
 
     final prevIndex = widget.branchIndex - 1;
     final prevTitle = _getTitleForBranchIndex(prevIndex);
@@ -424,7 +433,14 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
     final completedChapters = ref.watch(chapterProgressProvider);
     final isCompleted = completedChapters.contains(currentPath);
 
-    final hasNext = widget.branchIndex < 6;
+    final bool hasNext;
+    if (widget.branchIndex == 3) {
+      hasNext = true;
+    } else if (widget.branchIndex >= 5 && widget.branchIndex < 8) {
+      hasNext = true;
+    } else {
+      hasNext = false;
+    }
     final nextIndex = widget.branchIndex + 1;
     final nextTitle = _getTitleForBranchIndex(nextIndex);
     final nextPath = _getPathForBranchIndex(nextIndex);
