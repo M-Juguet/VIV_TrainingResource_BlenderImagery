@@ -132,6 +132,13 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
     });
 
     final bookmarks = ref.watch(bookmarksProvider);
+    final hasHeader = widget.modules.isNotEmpty && widget.modules.first is TitleModule;
+    final mainTitleModule = hasHeader ? widget.modules.first as TitleModule : null;
+    final otherModules = hasHeader ? widget.modules.skip(1) : widget.modules;
+
+    if (hasHeader && mainTitleModule != null) {
+      _moduleKeys.putIfAbsent(mainTitleModule.id, () => GlobalKey());
+    }
 
     return Stack(
       children: [
@@ -152,7 +159,12 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPreviousButton(context),
-                    ...widget.modules.map((module) {
+                    if (hasHeader && mainTitleModule != null)
+                      Container(
+                        key: _moduleKeys[mainTitleModule.id],
+                        child: _buildChapterHeader(mainTitleModule.title),
+                      ),
+                    ...otherModules.map((module) {
                       _moduleKeys.putIfAbsent(module.id, () => GlobalKey());
                       final isBookmarked = bookmarks.contains(module.id);
                       return Container(
@@ -492,6 +504,170 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
           ],
         ),
       ],
+    );
+  }
+
+  String? _getObjectiveForBranchIndex(int index) {
+    switch (index) {
+      case 3:
+        return "Maîtrisez les notions et prérequis fondamentaux de Blender pour bien démarrer votre apprentissage.";
+      case 5:
+        return "Comprendre le shading physique PBR, manipuler l'éditeur de nœuds et le Principled BSDF, et créer des matériaux procéduraux.";
+      case 6:
+        return "Comprendre les coordonnées UV, maîtriser le dépliage automatique Smart UV Project, utiliser la projection Box sans UV et organiser ses matériaux avec l'Asset Browser.";
+      case 7:
+        return "Comparer EEVEE et Cycles, mettre en œuvre un éclairage studio trois points ou HDRI, optimiser les paramètres de rendu et cadrer avec la caméra physique.";
+      case 8:
+        return "Comprendre le fonctionnement non destructif du compositeur par nœuds, régler l'exposition AgX, générer un effet de bloom avec le nœud Glare, isoler des composantes avec les passes de rendu et exporter au format adapté.";
+      default:
+        return null;
+    }
+  }
+
+  String _getBadgeTextForBranchIndex(int index) {
+    switch (index) {
+      case 3:
+        return "LES BASES • BASICS 101";
+      case 5:
+        return "FORMATION • CHAPITRE 1";
+      case 6:
+        return "FORMATION • CHAPITRE 2";
+      case 7:
+        return "FORMATION • CHAPITRE 3";
+      case 8:
+        return "FORMATION • CHAPITRE 4";
+      default:
+        return "CHAPITRE";
+    }
+  }
+
+  IconData _getBadgeIconForBranchIndex(int index) {
+    switch (index) {
+      case 3:
+        return LucideIcons.compass;
+      case 5:
+        return LucideIcons.palette;
+      case 6:
+        return LucideIcons.layers;
+      case 7:
+        return LucideIcons.lightbulb;
+      case 8:
+        return LucideIcons.sparkles;
+      default:
+        return LucideIcons.bookOpen;
+    }
+  }
+
+  Widget _buildChapterHeader(String title) {
+    final objective = _getObjectiveForBranchIndex(widget.branchIndex);
+    final badgeText = _getBadgeTextForBranchIndex(widget.branchIndex);
+    final badgeIcon = _getBadgeIconForBranchIndex(widget.branchIndex);
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: VivSpacing.space6),
+      decoration: BoxDecoration(
+        color: VivColors.black,
+        borderRadius: BorderRadius.circular(VivSpacing.radiusLg),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 24,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Stack(
+        children: [
+          // Decorative lime accent — top-right
+          Positioned(
+            right: -60,
+            top: -60,
+            child: Container(
+              width: 220,
+              height: 220,
+              decoration: BoxDecoration(
+                color: VivColors.lime.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          // Decorative lime accent — bottom-left
+          Positioned(
+            left: -40,
+            bottom: -50,
+            child: Container(
+              width: 140,
+              height: 140,
+              decoration: BoxDecoration(
+                color: VivColors.lime.withValues(alpha: 0.04),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(VivSpacing.space7),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Pill badge
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: VivSpacing.space4,
+                    vertical: VivSpacing.space2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: VivColors.lime.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(VivSpacing.radiusPill),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        badgeIcon,
+                        color: VivColors.lime,
+                        size: 14,
+                      ),
+                      const SizedBox(width: VivSpacing.space2),
+                      Text(
+                        badgeText,
+                        style: VivTypography.eyebrow.copyWith(
+                          color: VivColors.lime,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: VivSpacing.space5),
+                // Chapter title
+                Text(
+                  title,
+                  style: VivTypography.h2.copyWith(
+                    color: VivColors.paper,
+                  ),
+                ),
+                if (objective != null) ...[
+                  const SizedBox(height: VivSpacing.space4),
+                  // Objective / Introduction
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 580),
+                    child: Text(
+                      objective,
+                      style: VivTypography.body.copyWith(
+                        color: VivColors.gray300,
+                        fontWeight: FontWeight.w500,
+                        height: 1.7,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

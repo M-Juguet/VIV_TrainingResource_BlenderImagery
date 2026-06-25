@@ -83,6 +83,20 @@ class ProgramScreen extends StatelessWidget {
         ChapterPoint(label: 'Caméra physique', targetModuleId: 'ch3_sec6_title'),
       ],
     ),
+    Chapter(
+      id: 4,
+      title: 'Chapitre 4 : Post-production & Finalisation de l\'Image',
+      objective: 'Comprendre le fonctionnement non destructif du compositeur par nœuds, régler l\'exposition AgX, générer un effet de bloom avec le nœud Glare, isoler des composantes avec les passes de rendu et exporter au format adapté.',
+      icon: LucideIcons.sparkles,
+      routePath: '/chapter-4',
+      points: [
+        ChapterPoint(label: 'Le compositing dans Blender', targetModuleId: 'ch4_sec1_title'),
+        ChapterPoint(label: 'Exposition, contraste et bloom', targetModuleId: 'ch4_sec2_title'),
+        ChapterPoint(label: 'Les passes de rendu', targetModuleId: 'ch4_sec3_title'),
+        ChapterPoint(label: 'Exporter en haute définition', targetModuleId: 'ch4_sec4_title'),
+        ChapterPoint(label: 'Atelier : visuels « Beauté »', targetModuleId: 'ch4_sec5_title'),
+      ],
+    ),
   ];
 
   @override

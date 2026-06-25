@@ -67,6 +67,13 @@ class DashboardScreen extends ConsumerWidget {
       icon: LucideIcons.lightbulb,
       routePath: '/chapter-3',
     ),
+    DashboardChapterData(
+      id: 4,
+      title: 'Chapitre 4 : Post-production & Finalisation de l\'Image',
+      objective: 'Maîtrisez le compositing par nœuds, l\'exposition AgX, le bloom (Glare), les passes de rendu et l\'exportation HD.',
+      icon: LucideIcons.sparkles,
+      routePath: '/chapter-4',
+    ),
   ];
 
   @override
@@ -74,9 +81,9 @@ class DashboardScreen extends ConsumerWidget {
     final bookmarkedIds = ref.watch(bookmarksProvider);
     final completedChapters = ref.watch(chapterProgressProvider);
 
-    final allPaths = ['/basics-101', '/chapter-1', '/chapter-2', '/chapter-3'];
+    final allPaths = ['/basics-101', '/chapter-1', '/chapter-2', '/chapter-3', '/chapter-4'];
     final completedCount = allPaths.where((p) => completedChapters.contains(p)).length;
-    final double progressPercent = completedCount / 4.0;
+    final double progressPercent = completedCount / 5.0;
 
     return Scaffold(
       backgroundColor: Colors.transparent, // Car affiché dans le viewport de MainShell
@@ -197,6 +204,10 @@ class DashboardScreen extends ConsumerWidget {
     } else if (!completedChapters.contains('/chapter-3')) {
       nextTargetPath = '/chapter-3';
       buttonText = 'Continuer au Chapitre 3';
+      buttonIcon = LucideIcons.arrowRight;
+    } else if (!completedChapters.contains('/chapter-4')) {
+      nextTargetPath = '/chapter-4';
+      buttonText = 'Continuer au Chapitre 4';
       buttonIcon = LucideIcons.arrowRight;
     } else if (!completedChapters.contains('/basics-101')) {
       nextTargetPath = '/basics-101';
@@ -503,7 +514,8 @@ class DashboardScreen extends ConsumerWidget {
     recentBookmark = findBookmark(basics101Modules, 'Basics 101', '/basics-101') ??
         findBookmark(chapter1Modules, 'Fondamentaux du Shading & LookDev', '/chapter-1') ??
         findBookmark(chapter2Modules, 'Texturage Agile & Gestion Simplifiée des UVs', '/chapter-2') ??
-        findBookmark(chapter3Modules, 'Mise en lumière & Méthodes de Rendu', '/chapter-3');
+        findBookmark(chapter3Modules, 'Mise en lumière & Méthodes de Rendu', '/chapter-3') ??
+        findBookmark(chapter4Modules, 'Post-production & Finalisation de l\'Image', '/chapter-4');
 
     return Container(
       width: double.infinity,

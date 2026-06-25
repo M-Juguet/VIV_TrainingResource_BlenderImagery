@@ -6,9 +6,11 @@ import '../../features/dashboard/dashboard_screen.dart';
 import '../../features/program/program_screen.dart';
 import '../../features/bookmarks/bookmarks_screen.dart';
 import '../../features/basics_101/basics_101_screen.dart';
+import '../../features/basics_101/basics_wip_screen.dart';
 import '../../features/chapter_1/chapter_1_screen.dart';
 import '../../features/chapter_2/chapter_2_screen.dart';
 import '../../features/chapter_3/chapter_3_screen.dart';
+import '../../features/chapter_4/chapter_4_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/shell/main_shell.dart';
 import '../widgets/update_listener_wrapper.dart';
@@ -75,6 +77,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                path: '/basics-102',
+                builder: (context, state) => const BasicsWipScreen(
+                  chapterNumber: 2,
+                  title: 'Basics 102',
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
                 path: '/chapter-1',
                 builder: (context, state) {
                   final target = state.uri.queryParameters['target'];
@@ -101,6 +114,17 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) {
                   final target = state.uri.queryParameters['target'];
                   return Chapter3Screen(targetModuleId: target);
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/chapter-4',
+                builder: (context, state) {
+                  final target = state.uri.queryParameters['target'];
+                  return Chapter4Screen(targetModuleId: target);
                 },
               ),
             ],

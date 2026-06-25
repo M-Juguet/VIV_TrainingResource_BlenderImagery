@@ -4,10 +4,10 @@ import '../../core/data/mock_chapters_data.dart';
 
 import '../../core/widgets/chapter_scaffold.dart';
 
-class Chapter1Screen extends StatelessWidget {
+class Chapter4Screen extends StatelessWidget {
   final String? targetModuleId;
 
-  const Chapter1Screen({
+  const Chapter4Screen({
     super.key,
     this.targetModuleId,
   });
@@ -15,10 +15,10 @@ class Chapter1Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChapterScaffold(
-      title: 'Fondamentaux du Shading & LookDev',
-      modules: chapter1Modules,
+      title: 'Post-production & Finalisation de l\'Image',
+      modules: chapter4Modules,
       targetModuleId: targetModuleId,
-      branchIndex: 5,
+      branchIndex: 8,
     );
   }
 }

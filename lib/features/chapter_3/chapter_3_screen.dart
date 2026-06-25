@@ -18,7 +18,7 @@ class Chapter3Screen extends StatelessWidget {
       title: 'Mise en lumière & Méthodes de Rendu',
       modules: chapter3Modules,
       targetModuleId: targetModuleId,
-      branchIndex: 6,
+      branchIndex: 7,
     );
   }
 }

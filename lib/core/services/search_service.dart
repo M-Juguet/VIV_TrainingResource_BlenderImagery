@@ -45,20 +45,26 @@ const List<SearchChapterSource> searchSources = [
   SearchChapterSource(
     title: 'Fondamentaux du Shading & LookDev',
     routePath: '/chapter-1',
-    index: 4,
+    index: 5,
     modules: chapter1Modules,
   ),
   SearchChapterSource(
     title: 'Texturage Agile & Gestion Simplifiée des UVs',
     routePath: '/chapter-2',
-    index: 5,
+    index: 6,
     modules: chapter2Modules,
   ),
   SearchChapterSource(
     title: 'Mise en lumière & Méthodes de Rendu',
     routePath: '/chapter-3',
-    index: 6,
+    index: 7,
     modules: chapter3Modules,
+  ),
+  SearchChapterSource(
+    title: 'Post-production & Finalisation de l\'Image',
+    routePath: '/chapter-4',
+    index: 8,
+    modules: chapter4Modules,
   ),
 ];
 

@@ -18,7 +18,7 @@ class Chapter2Screen extends StatelessWidget {
       title: 'Texturage Agile & Gestion Simplifiée des UVs',
       modules: chapter2Modules,
       targetModuleId: targetModuleId,
-      branchIndex: 5,
+      branchIndex: 6,
     );
   }
 }
