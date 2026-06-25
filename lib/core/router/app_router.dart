@@ -6,7 +6,7 @@ import '../../features/dashboard/dashboard_screen.dart';
 import '../../features/program/program_screen.dart';
 import '../../features/bookmarks/bookmarks_screen.dart';
 import '../../features/basics_101/basics_101_screen.dart';
-import '../../features/basics_101/basics_wip_screen.dart';
+import '../../features/basics_102/basics_102_screen.dart';
 import '../../features/chapter_1/chapter_1_screen.dart';
 import '../../features/chapter_2/chapter_2_screen.dart';
 import '../../features/chapter_3/chapter_3_screen.dart';
@@ -78,10 +78,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/basics-102',
-                builder: (context, state) => const BasicsWipScreen(
-                  chapterNumber: 2,
-                  title: 'Basics 102',
-                ),
+                builder: (context, state) {
+                  final target = state.uri.queryParameters['target'];
+                  return Basics102Screen(targetModuleId: target);
+                },
               ),
             ],
           ),

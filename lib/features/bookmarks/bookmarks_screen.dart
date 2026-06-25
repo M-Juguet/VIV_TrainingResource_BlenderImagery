@@ -48,6 +48,7 @@ class BookmarksScreen extends ConsumerWidget {
     }
 
     checkModules(basics101Modules, 'Découverte & Prise en main', 0, '/basics-101');
+    checkModules(basics102Modules, 'Manipuler et organiser son travail', 0, '/basics-102');
     checkModules(chapter1Modules, 'Fondamentaux du Shading & LookDev', 1, '/chapter-1');
     checkModules(chapter2Modules, 'Texturage Agile & Gestion Simplifiée des UVs', 2, '/chapter-2');
     checkModules(chapter3Modules, 'Mise en lumière & Méthodes de Rendu', 3, '/chapter-3');

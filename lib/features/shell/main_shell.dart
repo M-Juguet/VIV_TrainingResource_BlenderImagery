@@ -197,7 +197,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                         ),
                                         const SizedBox(height: VivSpacing.space1),
                                         _buildNavItem(
-                                          icon: LucideIcons.hardHat,
+                                          icon: LucideIcons.folderOpen,
                                           title: _routeTitles[4]!,
                                           index: 4,
                                           selectedIndex: selectedIndex,
@@ -627,6 +627,12 @@ class _MainShellState extends ConsumerState<MainShell> {
         'subtitle': 'Basics 101 • Notions et prérequis fondamentaux',
         'icon': LucideIcons.compass,
         'route': '/basics-101',
+      },
+      {
+        'title': 'Manipuler et organiser son travail',
+        'subtitle': 'Basics 102 • Déplacements, pivots et collections',
+        'icon': LucideIcons.folderOpen,
+        'route': '/basics-102',
       },
       {
         'title': 'Chapitre 1',

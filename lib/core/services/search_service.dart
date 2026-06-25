@@ -43,6 +43,12 @@ const List<SearchChapterSource> searchSources = [
     modules: basics101Modules,
   ),
   SearchChapterSource(
+    title: 'Manipuler et organiser son travail',
+    routePath: '/basics-102',
+    index: 4,
+    modules: basics102Modules,
+  ),
+  SearchChapterSource(
     title: 'Fondamentaux du Shading & LookDev',
     routePath: '/chapter-1',
     index: 5,

@@ -527,6 +527,8 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
     switch (index) {
       case 3:
         return "Maîtrisez les notions et prérequis fondamentaux de Blender pour bien démarrer votre apprentissage.";
+      case 4:
+        return "Maîtrisez la sélection, les transformations fondamentales, l'utilisation du curseur 3D et des points de pivot, et organisez proprement vos projets avec les collections et l'empaquetage de textures.";
       case 5:
         return "Comprendre le shading physique PBR, manipuler l'éditeur de nœuds et le Principled BSDF, et créer des matériaux procéduraux.";
       case 6:
@@ -544,6 +546,8 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
     switch (index) {
       case 3:
         return "LES BASES • BASICS 101";
+      case 4:
+        return "LES BASES • BASICS 102";
       case 5:
         return "FORMATION • CHAPITRE 1";
       case 6:
@@ -561,6 +565,8 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
     switch (index) {
       case 3:
         return LucideIcons.compass;
+      case 4:
+        return LucideIcons.folderOpen;
       case 5:
         return LucideIcons.palette;
       case 6:
