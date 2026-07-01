@@ -564,9 +564,9 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
   IconData _getBadgeIconForBranchIndex(int index) {
     switch (index) {
       case 3:
-        return LucideIcons.compass;
+        return LucideIcons.mousePointer;
       case 4:
-        return LucideIcons.folderOpen;
+        return LucideIcons.move;
       case 5:
         return LucideIcons.palette;
       case 6:

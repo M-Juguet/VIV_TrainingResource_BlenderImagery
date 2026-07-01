@@ -106,7 +106,7 @@ class SettingsScreen extends ConsumerWidget {
           _buildSectionHeader('À propos', LucideIcons.info),
           const SizedBox(height: VivSpacing.space4),
           _buildCard([
-            _buildInfoRow('Nom de l\'application', '[SU] Intitulé de la formation'),
+            _buildInfoRow('Nom de l\'application', '[SU] Matériaux et rendu dans Blender : les fondamentaux'),
             const Divider(height: VivSpacing.space6, color: VivColors.gray100),
             _buildInfoRow('Version de l\'application', localVersion),
             const Divider(height: VivSpacing.space6, color: VivColors.gray100),

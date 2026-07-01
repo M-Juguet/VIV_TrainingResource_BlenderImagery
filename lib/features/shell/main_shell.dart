@@ -189,7 +189,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                     children: [
                                       if (_isBasicsExpanded || isCompact) ...[
                                         _buildNavItem(
-                                          icon: LucideIcons.compass,
+                                          icon: LucideIcons.mousePointer,
                                           title: _routeTitles[3]!,
                                           index: 3,
                                           selectedIndex: selectedIndex,
@@ -197,7 +197,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                         ),
                                         const SizedBox(height: VivSpacing.space1),
                                         _buildNavItem(
-                                          icon: LucideIcons.folderOpen,
+                                          icon: LucideIcons.move,
                                           title: _routeTitles[4]!,
                                           index: 4,
                                           selectedIndex: selectedIndex,
@@ -625,13 +625,13 @@ class _MainShellState extends ConsumerState<MainShell> {
       {
         'title': 'Découverte & Prise en main',
         'subtitle': 'Basics 101 • Notions et prérequis fondamentaux',
-        'icon': LucideIcons.compass,
+        'icon': LucideIcons.mousePointer,
         'route': '/basics-101',
       },
       {
         'title': 'Manipuler et organiser son travail',
         'subtitle': 'Basics 102 • Déplacements, pivots et collections',
-        'icon': LucideIcons.folderOpen,
+        'icon': LucideIcons.move,
         'route': '/basics-102',
       },
       {

@@ -113,7 +113,7 @@ class ProgramScreen extends StatelessWidget {
           ),
           const SizedBox(height: VivSpacing.space2),
           Text(
-            'Intitulé du programme de formation',
+            'Matériaux et rendu dans Blender : les fondamentaux',
             style: VivTypography.h1,
           ),
           const SizedBox(height: VivSpacing.space3),

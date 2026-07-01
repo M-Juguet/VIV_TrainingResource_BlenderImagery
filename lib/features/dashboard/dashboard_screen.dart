@@ -212,7 +212,7 @@ class DashboardScreen extends ConsumerWidget {
     } else if (!completedChapters.contains('/basics-101')) {
       nextTargetPath = '/basics-101';
       buttonText = 'Étudier Découverte & Prise en main';
-      buttonIcon = LucideIcons.compass;
+      buttonIcon = LucideIcons.mousePointer;
     } else {
       nextTargetPath = '/program';
       buttonText = 'Voir le programme complet';
@@ -259,7 +259,7 @@ class DashboardScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: VivSpacing.space2),
                 Text(
-                  'Intitulé du programme de formation',
+                  'Matériaux et rendu dans Blender : les fondamentaux',
                   style: VivTypography.h1.copyWith(color: VivColors.paper),
                 ),
                 const SizedBox(height: VivSpacing.space3),
@@ -646,14 +646,14 @@ class DashboardScreen extends ConsumerWidget {
           const SizedBox(height: VivSpacing.space4),
           _buildLinkItem(
             icon: LucideIcons.fileText,
-            label: 'Documentation de référence',
-            onTap: () => launchUrlHelper('https://example.com'),
+            label: 'Documentation officielle',
+            onTap: () => launchUrlHelper('https://docs.blender.org/manual/en/latest/'),
           ),
           const Divider(height: 16),
           _buildLinkItem(
             icon: LucideIcons.download,
-            label: 'Téléchargement des outils',
-            onTap: () => launchUrlHelper('https://example.com'),
+            label: 'Télécharger Blender',
+            onTap: () => launchUrlHelper('https://www.blender.org/download/'),
           ),
         ],
       ),
