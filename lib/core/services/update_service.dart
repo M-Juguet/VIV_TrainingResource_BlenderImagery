@@ -99,4 +99,52 @@ class UpdateService {
       rethrow;
     }
   }
+
+  /// Diagnostique la connexion à l'API GitHub et renvoie un rapport détaillé
+  Future<Map<String, dynamic>> diagnoseConnection() async {
+    final Map<String, dynamic> report = {
+      'targetUrl': 'https://api.github.com/repos/$owner/$repo/releases/latest',
+      'hasToken': _githubToken.isNotEmpty,
+      'statusCode': null,
+      'error': null,
+      'releaseFound': false,
+      'tagName': null,
+      'hasExeAsset': false,
+      'downloadUrl': null,
+    };
+
+    try {
+      final response = await _dio.get(
+        'https://api.github.com/repos/$owner/$repo/releases/latest',
+      );
+      report['statusCode'] = response.statusCode;
+      if (response.statusCode == 200) {
+        report['releaseFound'] = true;
+        final data = response.data;
+        report['tagName'] = data['tag_name'];
+        
+        String url = '';
+        if (data['assets'] != null) {
+          final assets = data['assets'] as List;
+          for (var asset in assets) {
+            final downloadUrl = asset['browser_download_url'] as String?;
+            if (downloadUrl != null && downloadUrl.endsWith('.exe')) {
+              url = downloadUrl;
+              break;
+            }
+          }
+        }
+        if (url.isNotEmpty) {
+          report['hasExeAsset'] = true;
+          report['downloadUrl'] = url;
+        }
+      }
+    } on DioException catch (e) {
+      report['statusCode'] = e.response?.statusCode;
+      report['error'] = 'DioException: ${e.message}\nType: ${e.type}\nResponse: ${e.response?.data}';
+    } catch (e) {
+      report['error'] = e.toString();
+    }
+    return report;
+  }
 }

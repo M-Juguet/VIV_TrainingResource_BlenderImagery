@@ -174,3 +174,25 @@ class UpdateNotifier extends Notifier<UpdateState> {
     return false;
   }
 }
+
+final updateDiagnosticProvider = NotifierProvider<UpdateDiagnosticNotifier, AsyncValue<Map<String, dynamic>?>>(() {
+  return UpdateDiagnosticNotifier();
+});
+
+class UpdateDiagnosticNotifier extends Notifier<AsyncValue<Map<String, dynamic>?>> {
+  @override
+  AsyncValue<Map<String, dynamic>?> build() {
+    return const AsyncValue.data(null); // Aucun diagnostic lancé par défaut
+  }
+
+  Future<void> runDiagnostic() async {
+    state = const AsyncValue.loading();
+    try {
+      final service = ref.read(updateServiceProvider);
+      final result = await service.diagnoseConnection();
+      state = AsyncValue.data(result);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
+  }
+}

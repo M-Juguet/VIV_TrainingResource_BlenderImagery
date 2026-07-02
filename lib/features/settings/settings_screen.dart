@@ -16,6 +16,7 @@ class SettingsScreen extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
     final updateState = ref.watch(updateProvider);
     final localVersion = updateState.localVersion ?? '0.1.0';
+    final diagnosticState = ref.watch(updateDiagnosticProvider);
 
     ref.listen<UpdateState>(updateProvider, (previous, next) {
       if (previous?.status == UpdateStatus.checking) {
@@ -103,6 +104,54 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ]),
           const SizedBox(height: VivSpacing.space8),
+          _buildSectionHeader('Diagnostic de connexion', LucideIcons.activity),
+          const SizedBox(height: VivSpacing.space4),
+          _buildCard([
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Tester la communication GitHub', style: VivTypography.small.copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      'Vérifier la connectivité avec l\'API de release pour diagnostiquer les mises à jour.',
+                      style: VivTypography.small.copyWith(color: VivColors.gray500),
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: VivColors.black,
+                    foregroundColor: VivColors.lime,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(VivSpacing.radiusMd),
+                    ),
+                  ),
+                  onPressed: diagnosticState.isLoading
+                      ? null
+                      : () => ref.read(updateDiagnosticProvider.notifier).runDiagnostic(),
+                  child: Text(
+                    diagnosticState.isLoading ? 'Diagnostic...' : 'Lancer le test',
+                    style: VivTypography.small.copyWith(fontWeight: FontWeight.bold, color: VivColors.lime),
+                  ),
+                ),
+              ],
+            ),
+            if (diagnosticState.hasValue && diagnosticState.value != null) ...[
+              const Divider(height: VivSpacing.space6, color: VivColors.gray100),
+              _buildDiagnosticResult(diagnosticState.value!),
+            ] else if (diagnosticState.hasError) ...[
+              const Divider(height: VivSpacing.space6, color: VivColors.gray100),
+              Text(
+                'Erreur lors du test : ${diagnosticState.error}',
+                style: VivTypography.small.copyWith(color: Colors.redAccent, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ]),
+          const SizedBox(height: VivSpacing.space8),
           _buildSectionHeader('À propos', LucideIcons.info),
           const SizedBox(height: VivSpacing.space4),
           _buildCard([
@@ -145,6 +194,83 @@ class SettingsScreen extends ConsumerWidget {
         Icon(icon, size: 20, color: VivColors.lime),
         const SizedBox(width: VivSpacing.space3),
         Text(title, style: VivTypography.h4.copyWith(color: VivColors.black)),
+      ],
+    );
+  }
+
+  Widget _buildDiagnosticResult(Map<String, dynamic> report) {
+    final hasError = report['error'] != null || report['statusCode'] != 200 || !report['releaseFound'] || !report['hasExeAsset'];
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          hasError ? 'Rapport : Problème détecté' : 'Rapport : Connexion établie avec succès',
+          style: VivTypography.small.copyWith(
+            fontWeight: FontWeight.bold,
+            color: hasError ? Colors.redAccent : VivColors.green600,
+          ),
+        ),
+        const SizedBox(height: VivSpacing.space4),
+        _buildDiagnosticRow('URL ciblée', report['targetUrl'] ?? ''),
+        const SizedBox(height: VivSpacing.space2),
+        _buildDiagnosticRow('Token d\'accès configuré', report['hasToken'] == true ? 'Oui' : 'Non'),
+        const SizedBox(height: VivSpacing.space2),
+        _buildDiagnosticRow(
+          'Code HTTP retourné',
+          report['statusCode'] != null ? '${report['statusCode']}' : 'Aucun (Échec réseau)',
+          color: report['statusCode'] == 200 ? VivColors.green600 : Colors.redAccent,
+        ),
+        const SizedBox(height: VivSpacing.space2),
+        _buildDiagnosticRow('Release GitHub trouvée', report['releaseFound'] == true ? 'Oui (tag: ${report['tagName']})' : 'Non'),
+        const SizedBox(height: VivSpacing.space2),
+        _buildDiagnosticRow('Installeur (.exe) détecté', report['hasExeAsset'] == true ? 'Oui' : 'Non'),
+        if (report['error'] != null) ...[
+          const SizedBox(height: VivSpacing.space4),
+          Text(
+            'Message d\'erreur technique :',
+            style: VivTypography.small.copyWith(fontWeight: FontWeight.bold, color: VivColors.gray500),
+          ),
+          const SizedBox(height: VivSpacing.space2),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(VivSpacing.space3),
+            decoration: BoxDecoration(
+              color: VivColors.gray100,
+              borderRadius: BorderRadius.circular(VivSpacing.radiusSm),
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Text(
+                '${report['error']}',
+                style: const TextStyle(
+                  fontFamily: 'monospace',
+                  fontSize: 11,
+                  color: Colors.redAccent,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildDiagnosticRow(String label, String value, {Color? color}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: VivTypography.small.copyWith(color: VivColors.gray500, fontWeight: FontWeight.w500),
+        ),
+        Text(
+          value,
+          style: VivTypography.small.copyWith(
+            fontWeight: FontWeight.bold,
+            color: color ?? VivColors.black,
+          ),
+        ),
       ],
     );
   }
