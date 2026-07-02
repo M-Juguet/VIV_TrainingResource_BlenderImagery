@@ -43,11 +43,12 @@ class _MainShellState extends ConsumerState<MainShell> {
     2: 'Mes signets',
     3: 'Basics 101',
     4: 'Basics 102',
-    5: 'Shading & LookDev',
-    6: 'Texturage Agile & UVs',
-    7: 'Lumière & Rendu',
-    8: 'Post-prod & Finalisation',
-    9: 'Paramètres',
+    5: 'Basics 103',
+    6: 'Shading & LookDev',
+    7: 'Texturage Agile & UVs',
+    8: 'Lumière & Rendu',
+    9: 'Post-prod & Finalisation',
+    10: 'Paramètres',
   };
 
   void _goBranch(int index) {
@@ -203,6 +204,14 @@ class _MainShellState extends ConsumerState<MainShell> {
                                           selectedIndex: selectedIndex,
                                           isCompact: isCompact,
                                         ),
+                                        const SizedBox(height: VivSpacing.space1),
+                                        _buildNavItem(
+                                          icon: LucideIcons.box,
+                                          title: _routeTitles[5]!,
+                                          index: 5,
+                                          selectedIndex: selectedIndex,
+                                          isCompact: isCompact,
+                                        ),
                                       ],
                                     ],
                                   ),
@@ -228,14 +237,6 @@ class _MainShellState extends ConsumerState<MainShell> {
                                       if (_isFormationExpanded || isCompact) ...[
                                         _buildNavItem(
                                           icon: LucideIcons.palette,
-                                          title: _routeTitles[5]!,
-                                          index: 5,
-                                          selectedIndex: selectedIndex,
-                                          isCompact: isCompact,
-                                        ),
-                                        const SizedBox(height: VivSpacing.space1),
-                                        _buildNavItem(
-                                          icon: LucideIcons.layers,
                                           title: _routeTitles[6]!,
                                           index: 6,
                                           selectedIndex: selectedIndex,
@@ -243,7 +244,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                                         ),
                                         const SizedBox(height: VivSpacing.space1),
                                         _buildNavItem(
-                                          icon: LucideIcons.lightbulb,
+                                          icon: LucideIcons.layers,
                                           title: _routeTitles[7]!,
                                           index: 7,
                                           selectedIndex: selectedIndex,
@@ -251,9 +252,17 @@ class _MainShellState extends ConsumerState<MainShell> {
                                         ),
                                         const SizedBox(height: VivSpacing.space1),
                                         _buildNavItem(
-                                          icon: LucideIcons.sparkles,
+                                          icon: LucideIcons.lightbulb,
                                           title: _routeTitles[8]!,
                                           index: 8,
+                                          selectedIndex: selectedIndex,
+                                          isCompact: isCompact,
+                                        ),
+                                        const SizedBox(height: VivSpacing.space1),
+                                        _buildNavItem(
+                                          icon: LucideIcons.sparkles,
+                                          title: _routeTitles[9]!,
+                                          index: 9,
                                           selectedIndex: selectedIndex,
                                           isCompact: isCompact,
                                         ),
@@ -287,8 +296,8 @@ class _MainShellState extends ConsumerState<MainShell> {
                             ),
                             child: _buildNavItem(
                               icon: LucideIcons.settings,
-                              title: _routeTitles[9]!,
-                              index: 9,
+                              title: _routeTitles[10]!,
+                              index: 10,
                               selectedIndex: selectedIndex,
                               isCompact: isCompact,
                             ),
@@ -633,6 +642,12 @@ class _MainShellState extends ConsumerState<MainShell> {
         'subtitle': 'Basics 102 • Déplacements, pivots et collections',
         'icon': LucideIcons.move,
         'route': '/basics-102',
+      },
+      {
+        'title': 'Bases de la modélisation',
+        'subtitle': 'Basics 103 • Le maillage, les outils et les modificateurs',
+        'icon': LucideIcons.box,
+        'route': '/basics-103',
       },
       {
         'title': 'Chapitre 1',

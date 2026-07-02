@@ -368,12 +368,14 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
       case 4:
         return '/basics-102';
       case 5:
-        return '/chapter-1';
+        return '/basics-103';
       case 6:
-        return '/chapter-2';
+        return '/chapter-1';
       case 7:
-        return '/chapter-3';
+        return '/chapter-2';
       case 8:
+        return '/chapter-3';
+      case 9:
         return '/chapter-4';
       default:
         return '/dashboard';
@@ -387,12 +389,14 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
       case 4:
         return 'Basics 102';
       case 5:
-        return 'Shading & LookDev';
+        return 'Bases de la modélisation';
       case 6:
-        return 'Chapitre 2';
+        return 'Shading & LookDev';
       case 7:
-        return 'Chapitre 3';
+        return 'Chapitre 2';
       case 8:
+        return 'Chapitre 3';
+      case 9:
         return 'Chapitre 4';
       default:
         return '';
@@ -401,7 +405,6 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
 
   Widget _buildPreviousButton(BuildContext context) {
     if (widget.branchIndex <= 3) return const SizedBox.shrink();
-    if (widget.branchIndex == 5) return const SizedBox.shrink();
 
     final prevIndex = widget.branchIndex - 1;
     final prevTitle = _getTitleForBranchIndex(prevIndex);
@@ -434,9 +437,7 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
     final isCompleted = completedChapters.contains(currentPath);
 
     final bool hasNext;
-    if (widget.branchIndex == 3) {
-      hasNext = true;
-    } else if (widget.branchIndex >= 5 && widget.branchIndex < 8) {
+    if (widget.branchIndex >= 3 && widget.branchIndex < 9) {
       hasNext = true;
     } else {
       hasNext = false;
@@ -530,12 +531,14 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
       case 4:
         return "Maîtrisez la sélection, les transformations fondamentales, l'utilisation du curseur 3D et des points de pivot, et organisez proprement vos projets avec les collections et l'empaquetage de textures.";
       case 5:
-        return "Comprendre le shading physique PBR, manipuler l'éditeur de nœuds et le Principled BSDF, et créer des matériaux procéduraux.";
+        return "Découvrez les bases de la modélisation polygonale : maillages, outils d'édition fondamentaux (Extrude, Inset, Bevel, Loop Cut) et gestion de la topologie.";
       case 6:
-        return "Comprendre les coordonnées UV, maîtriser le dépliage automatique Smart UV Project, utiliser la projection Box sans UV et organiser ses matériaux avec l'Asset Browser.";
+        return "Comprendre le shading physique PBR, manipuler l'éditeur de nœuds et le Principled BSDF, et créer des matériaux procéduraux.";
       case 7:
-        return "Comparer EEVEE et Cycles, mettre en œuvre un éclairage studio trois points ou HDRI, optimiser les paramètres de rendu et cadrer avec la caméra physique.";
+        return "Comprendre les coordonnées UV, maîtriser le dépliage automatique Smart UV Project, utiliser la projection Box sans UV et organiser ses matériaux avec l'Asset Browser.";
       case 8:
+        return "Comparer EEVEE et Cycles, mettre en œuvre un éclairage studio trois points ou HDRI, optimiser les paramètres de rendu et cadrer avec la caméra physique.";
+      case 9:
         return "Comprendre le fonctionnement non destructif du compositeur par nœuds, régler l'exposition AgX, générer un effet de bloom avec le nœud Glare, isoler des composantes avec les passes de rendu et exporter au format adapté.";
       default:
         return null;
@@ -549,12 +552,14 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
       case 4:
         return "LES BASES • BASICS 102";
       case 5:
-        return "FORMATION • CHAPITRE 1";
+        return "LES BASES • BASICS 103";
       case 6:
-        return "FORMATION • CHAPITRE 2";
+        return "FORMATION • CHAPITRE 1";
       case 7:
-        return "FORMATION • CHAPITRE 3";
+        return "FORMATION • CHAPITRE 2";
       case 8:
+        return "FORMATION • CHAPITRE 3";
+      case 9:
         return "FORMATION • CHAPITRE 4";
       default:
         return "CHAPITRE";
@@ -568,12 +573,14 @@ class _ChapterScaffoldState extends ConsumerState<ChapterScaffold> {
       case 4:
         return LucideIcons.move;
       case 5:
-        return LucideIcons.palette;
+        return LucideIcons.box;
       case 6:
-        return LucideIcons.layers;
+        return LucideIcons.palette;
       case 7:
-        return LucideIcons.lightbulb;
+        return LucideIcons.layers;
       case 8:
+        return LucideIcons.lightbulb;
+      case 9:
         return LucideIcons.sparkles;
       default:
         return LucideIcons.bookOpen;

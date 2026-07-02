@@ -81,9 +81,9 @@ class DashboardScreen extends ConsumerWidget {
     final bookmarkedIds = ref.watch(bookmarksProvider);
     final completedChapters = ref.watch(chapterProgressProvider);
 
-    final allPaths = ['/basics-101', '/chapter-1', '/chapter-2', '/chapter-3', '/chapter-4'];
+    final allPaths = ['/basics-101', '/basics-102', '/basics-103', '/chapter-1', '/chapter-2', '/chapter-3', '/chapter-4'];
     final completedCount = allPaths.where((p) => completedChapters.contains(p)).length;
-    final double progressPercent = completedCount / 5.0;
+    final double progressPercent = completedCount / 7.0;
 
     return Scaffold(
       backgroundColor: Colors.transparent, // Car affiché dans le viewport de MainShell
@@ -189,11 +189,23 @@ class DashboardScreen extends ConsumerWidget {
     double progressPercent,
     Set<String> completedChapters,
   ) {
-    String nextTargetPath = '/chapter-1';
-    String buttonText = 'Commencer le Chapitre 1';
-    IconData buttonIcon = LucideIcons.play;
+    String nextTargetPath = '/basics-101';
+    String buttonText = 'Étudier Découverte & Prise en main';
+    IconData buttonIcon = LucideIcons.mousePointer;
 
-    if (!completedChapters.contains('/chapter-1')) {
+    if (!completedChapters.contains('/basics-101')) {
+      nextTargetPath = '/basics-101';
+      buttonText = 'Étudier Découverte & Prise en main';
+      buttonIcon = LucideIcons.mousePointer;
+    } else if (!completedChapters.contains('/basics-102')) {
+      nextTargetPath = '/basics-102';
+      buttonText = 'Étudier Basics 102';
+      buttonIcon = LucideIcons.move;
+    } else if (!completedChapters.contains('/basics-103')) {
+      nextTargetPath = '/basics-103';
+      buttonText = 'Étudier Basics 103';
+      buttonIcon = LucideIcons.box;
+    } else if (!completedChapters.contains('/chapter-1')) {
       nextTargetPath = '/chapter-1';
       buttonText = 'Commencer le Chapitre 1';
       buttonIcon = LucideIcons.play;
@@ -209,10 +221,6 @@ class DashboardScreen extends ConsumerWidget {
       nextTargetPath = '/chapter-4';
       buttonText = 'Continuer au Chapitre 4';
       buttonIcon = LucideIcons.arrowRight;
-    } else if (!completedChapters.contains('/basics-101')) {
-      nextTargetPath = '/basics-101';
-      buttonText = 'Étudier Découverte & Prise en main';
-      buttonIcon = LucideIcons.mousePointer;
     } else {
       nextTargetPath = '/program';
       buttonText = 'Voir le programme complet';
@@ -284,7 +292,7 @@ class DashboardScreen extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Progression globale : $completedCount/4 chapitres',
+                            'Progression globale : $completedCount/7 chapitres',
                             style: VivTypography.small.copyWith(
                               color: VivColors.gray300,
                               fontWeight: FontWeight.bold,
@@ -512,6 +520,8 @@ class DashboardScreen extends ConsumerWidget {
     }
 
     recentBookmark = findBookmark(basics101Modules, 'Découverte & Prise en main', '/basics-101') ??
+        findBookmark(basics102Modules, 'Basics 102', '/basics-102') ??
+        findBookmark(basics103Modules, 'Basics 103', '/basics-103') ??
         findBookmark(chapter1Modules, 'Fondamentaux du Shading & LookDev', '/chapter-1') ??
         findBookmark(chapter2Modules, 'Texturage Agile & Gestion Simplifiée des UVs', '/chapter-2') ??
         findBookmark(chapter3Modules, 'Mise en lumière & Méthodes de Rendu', '/chapter-3') ??
